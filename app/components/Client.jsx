@@ -2,7 +2,6 @@
 
 var React = require("react");
 var GMap = require("./GMap");
-var _ = require("lodash");
 
 var LocationSearch = React.createClass({
     render: function() {

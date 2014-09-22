@@ -4,6 +4,7 @@
 
 var React = require('react');
 
+/* global google */
 var GMap = React.createClass({
 
   // initialize local variables
@@ -24,7 +25,7 @@ var GMap = React.createClass({
       height: 500,
       points: [],
       gmaps_api_key: ''
-    }
+    };
   },
 
   // update geo-encoded markers
@@ -66,7 +67,7 @@ var GMap = React.createClass({
     var style = {
       width: this.props.width,
       height: this.props.height
-    }
+    };
 
     return (
       <div style={style}></div>
