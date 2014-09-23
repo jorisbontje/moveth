@@ -4,20 +4,51 @@ var React = require("react");
 var GMap = require("./GMap");
 
 var LocationSearch = React.createClass({
+    getInitialState: function() {
+        return {
+            locationText: this.props.locationText
+        };
+    },
+
     render: function() {
         return (
-            <form className="form-inline" role="form">
+            <form className="form-inline" role="form" onSubmit={this.onSubmit}>
                 <div className="form-group">
                     <label className="sr-only" forHtml="pickupLocation">Pickup location</label>
-                    <input type="text" className="form-control" id="pickupLocation" placeholder="Pickup location" />
+                    <input type="text" className="form-control" id="pickupLocation" placeholder="Pickup location" value={this.state.locationText} onChange={this.onLocationChange} />
                 </div>
                 <button type="submit" className="btn btn-default">Search</button>
             </form>
         );
+    },
+
+    onLocationChange: function(e) {
+        this.setState({locationText: e.target.value});
+    },
+
+    onSubmit: function(e) {
+        e.preventDefault();
+        var locationText = this.state.locationText.trim();
+
+        if (!locationText) {
+            return false;
+        }
+
+        console.log("PICKUP", locationText);
+        return false;
     }
 });
 
 var Client = React.createClass({
+    getInitialState: function() {
+        return {
+            locationText: '',
+            latitude: 60.170833,
+            longitude: 24.9375,
+            zoom: 15
+        };
+    },
+
     render: function() {
         return (
             <div className="client">
@@ -28,22 +59,38 @@ var Client = React.createClass({
                 </div>
                 <div className="row">
                     <div className="col-xs-12">
-                        <LocationSearch />
+                        <LocationSearch locationText={this.state.locationText} />
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-xs-12">
-                        <GMap latitude={60.170833} longitude={24.9375} zoom={5} width={250} height={250}
-                              points={[{latitude:60.1876172,longitude:24.815366,title:"HIIT Open Innovation House"},{latitude:60.185478,longitude:24.812257,title:"HIIT Otaniemi"}, {latitude:60.2049747,longitude:24.9634712,title:"HIIT Kumpula"}]} />
+                        <GMap latitude={this.state.latitude} longitude={this.state.longitude} zoom={this.state.zoom}
+                              width={500} height={500}
+                              points={[{latitude:this.state.latitude, longitude:this.state.longitude, title:"YOU"}]} />
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-xs-12">
                         <p>We have X pilots in your area.</p>
+                        <hr />
+                        <p>Lat: {this.state.latitude} Long: {this.state.longitude}</p>
                     </div>
                 </div>
             </div>
         );
+    },
+
+    geoSuccess: function(position) {
+        console.log("POSITION", position);
+        this.setState({latitude: position.coords.latitude, longitude: position.coords.longitude});
+    },
+
+    geoError: function(error) {
+        console.log("ERROR", error);
+    },
+
+    componentDidMount: function() {
+        navigator.geolocation.getCurrentPosition(this.geoSuccess, this.geoError);
     }
 });
 
