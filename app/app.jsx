@@ -10,6 +10,7 @@ window.React = React;
 var MovEthApp = require("./components/MovEthApp");
 
 var Client = require("./components/Client");
+var ConfirmRequest = require("./components/ConfirmRequest");
 
 
 // Load jQuery and bootstrap
@@ -27,6 +28,7 @@ var routes = (
         <Route handler={MovEthApp}>
             <Redirect from="/" to="client" />
             <Route name="client" path="/client" handler={Client} />
+            <Route name="confirmRequest" path="/request/:latitude,:longitude/:address" handler={ConfirmRequest} />
         </Route>
     </Routes>
 );

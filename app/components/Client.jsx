@@ -1,51 +1,16 @@
 /** @jsx React.DOM */
 
 var React = require("react");
+var Router = require("react-router");
+
 var GMap = require("./GMap");
-
-var LocationSearch = React.createClass({
-    getInitialState: function() {
-        return {
-            locationText: this.props.locationText
-        };
-    },
-
-    render: function() {
-        return (
-            <form className="form-inline" role="form" onSubmit={this.onSubmit}>
-                <div className="form-group">
-                    <label className="sr-only" forHtml="pickupLocation">Pickup location</label>
-                    <input type="text" className="form-control" id="pickupLocation" placeholder="Pickup location" value={this.state.locationText} onChange={this.onLocationChange} />
-                </div>
-                <button type="submit" className="btn btn-default">Search</button>
-            </form>
-        );
-    },
-
-    onLocationChange: function(e) {
-        this.setState({locationText: e.target.value});
-    },
-
-    onSubmit: function(e) {
-        e.preventDefault();
-        var locationText = this.state.locationText.trim();
-
-        if (!locationText) {
-            return false;
-        }
-
-        console.log("PICKUP", locationText);
-        return false;
-    }
-});
 
 var Client = React.createClass({
     getInitialState: function() {
         return {
-            locationText: '',
             latitude: parseFloat(localStorage["moveth:lat"]) || 51.521048,
-            longitude: parseFloat(localStorage["moveth:long"]) || 0.051374,
-            zoom: 15
+            longitude: parseFloat(localStorage["moveth:long"] ) || 0.051374,
+            address: localStorage["moveth:address"] || "69-89 Mile End Rd, London E1 4UJ, UK",
         };
     },
 
@@ -57,21 +22,12 @@ var Client = React.createClass({
                         <h1>movETH</h1>
                     </div>
                 </div>
-                <div className="row">
-                    <div className="col-xs-12">
-                        <LocationSearch locationText={this.state.locationText} />
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-xs-12">
-                        <GMap latitude={this.state.latitude} longitude={this.state.longitude} zoom={this.state.zoom}
-                              width={500} height={500}
-                              points={[{latitude:this.state.latitude, longitude:this.state.longitude, title:"YOU"}]} />
-                    </div>
-                </div>
+                <GMap latitude={this.state.latitude} longitude={this.state.longitude} address={this.state.address}
+                      width={500} height={500} zoom={15} onLocationChange={this.onLocationChange} onAddressChange={this.onAddressChange} />
                 <div className="row">
                     <div className="col-xs-12">
                         <p>We have X pilots in your area.</p>
+                        <button type="button" className="btn btn-info" onClick={this.onRequest} >Request Airlift</button>
                         <hr />
                         <p>Lat: {this.state.latitude} Long: {this.state.longitude}</p>
                     </div>
@@ -80,19 +36,19 @@ var Client = React.createClass({
         );
     },
 
-    geoSuccess: function(position) {
-        console.log("POSITION", position);
-        this.setState({latitude: position.coords.latitude, longitude: position.coords.longitude});
-        localStorage["moveth:lat"] = position.coords.latitude;
-        localStorage["moveth:long"] = position.coords.longitude;
+    onLocationChange: function(latitude, longitude) {
+        localStorage["moveth:lat"] = latitude;
+        localStorage["moveth:long"] = longitude;
+        this.setState({latitude: latitude, longitude: longitude});
     },
 
-    geoError: function(error) {
-        console.log("ERROR", error);
+    onAddressChange: function(address) {
+        localStorage["moveth:address"] = address;
+        this.setState({address: address});
     },
 
-    componentDidMount: function() {
-        navigator.geolocation.getCurrentPosition(this.geoSuccess, this.geoError);
+    onRequest: function() {
+        Router.transitionTo('confirmRequest', {latitude: this.state.latitude, longitude: this.state.longitude, address: this.state.address});
     }
 });
 
