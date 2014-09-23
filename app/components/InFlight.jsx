@@ -3,19 +3,19 @@
 var React = require("react");
 var Router = require("react-router");
 
-var utils = require("../utils");
 var GMap = require("./GMap");
 
-var ConfirmRequest = React.createClass({
+var InFlight = React.createClass({
     render: function() {
         var latitude = parseFloat(this.props.params.latitude);
         var longitude = parseFloat(this.props.params.longitude);
+        var flightId = this.props.params.flightId;
 
         return (
             <div className="client">
                 <div className="row">
                     <div className="col-xs-12">
-                        <h1>CONFIRMATION</h1>
+                        <h1>IN FLIGHT</h1>
                     </div>
                 </div>
                 <GMap latitude={latitude} longitude={longitude} address={this.props.params.address}
@@ -23,18 +23,18 @@ var ConfirmRequest = React.createClass({
                 <div className="row">
                     <div className="col-xs-12">
                         <p>Pick up time is approximately X min.</p>
-                        <button type="button" className="btn btn-success" onClick={this.onConfirm}>Confirm Airlift</button>
-                        <button type="button" className="btn btn-default" onClick={this.onCancel}>Cancel</button>
+                        <button type="button" className="btn btn-success" onClick={this.onCall}>Call Pilot</button>
+                        <button type="button" className="btn btn-danger" onClick={this.onCancel}>Cancel</button>
+                        <hr />
+                        <p>Flight ID: {flightId}</p>
                     </div>
                 </div>
             </div>
         );
     },
 
-    onConfirm: function() {
-        console.log("confirmed");
-        var flightId = utils.randomId();
-        Router.transitionTo('inFlight', {latitude: this.props.params.latitude, longitude: this.props.params.longitude, address: this.props.params.address, flightId: flightId});
+    onCall: function() {
+        console.log("calling");
     },
 
     onCancel: function() {
@@ -42,4 +42,4 @@ var ConfirmRequest = React.createClass({
     },
 });
 
-module.exports = ConfirmRequest;
+module.exports = InFlight;
