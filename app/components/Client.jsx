@@ -43,8 +43,8 @@ var Client = React.createClass({
     getInitialState: function() {
         return {
             locationText: '',
-            latitude: 60.170833,
-            longitude: 24.9375,
+            latitude: parseFloat(localStorage["moveth:lat"]) || 51.521048,
+            longitude: parseFloat(localStorage["moveth:long"]) || 0.051374,
             zoom: 15
         };
     },
@@ -83,6 +83,8 @@ var Client = React.createClass({
     geoSuccess: function(position) {
         console.log("POSITION", position);
         this.setState({latitude: position.coords.latitude, longitude: position.coords.longitude});
+        localStorage["moveth:lat"] = position.coords.latitude;
+        localStorage["moveth:long"] = position.coords.longitude;
     },
 
     geoError: function(error) {

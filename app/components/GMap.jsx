@@ -73,7 +73,6 @@ var GMap = React.createClass({
         var geocoder = this.state.geocoder;
         geocoder.geocode({'latLng': latlng}, function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
-                console.log("GEOCODER", results);
                 if (results[0]) {
                     this.setState({locationText: results[0].formatted_address});
                 } else {
@@ -129,7 +128,6 @@ var GMap = React.createClass({
 
     // update markers if needed
     componentWillReceiveProps : function(props) {
-        console.log(props);
         if(props.latitude || props.longitude) this.updateCenter(props.latitude, props.longitude);
         if(props.points) this.updateMarkers(props.points);
     }
