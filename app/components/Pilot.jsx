@@ -38,7 +38,7 @@ var Pilot = React.createClass({
                             <button type="button" className="btn btn-info" onClick={this.onGoOnline}>Go Online</button>
                         }
                         <hr />
-                        <p>UID: {this.props.uid}</p>
+                        <p>UID: {this.props.client.UID()}</p>
                         <p>Lat: {this.state.latitude} Long: {this.state.longitude}</p>
                     </div>
                 </div>
@@ -51,18 +51,27 @@ var Pilot = React.createClass({
         localStorage["moveth:lat"] = latitude;
         localStorage["moveth:long"] = longitude;
         this.setState({latitude: latitude, longitude: longitude});
-        // if online, update location
+
+        if (this.state.online) {
+            this.track();
+        }
     },
 
     onGoOnline: function() {
         console.log("go online");
         this.setState({online: true});
-        // register account / name
+        this.track();
     },
 
     onGoOffline: function() {
         console.log("go offline");
         this.setState({online: false});
+        this.props.client.pilotOffline(Date.now());
+    },
+
+    track: function() {
+        console.log("tracking location");
+        this.props.client.trackPilotLocation(this.state.latitude, this.state.longitude, Date.now());
     }
 });
 
