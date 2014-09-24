@@ -22,7 +22,7 @@ var Client = React.createClass({
                         <h1>movETH</h1>
                     </div>
                 </div>
-                <GMap latitude={this.state.latitude} longitude={this.state.longitude} address={this.state.address}
+                <GMap latitude={this.state.latitude} longitude={this.state.longitude} address={this.state.address} showAddress={true}
                       width={500} height={500} zoom={15} onLocationChange={this.onLocationChange} onAddressChange={this.onAddressChange} />
                 <div className="row">
                     <div className="col-xs-12">

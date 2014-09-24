@@ -18,7 +18,7 @@ var ConfirmRequest = React.createClass({
                         <h1>CONFIRMATION</h1>
                     </div>
                 </div>
-                <GMap latitude={latitude} longitude={longitude} address={this.props.params.address}
+                <GMap latitude={latitude} longitude={longitude} address={this.props.params.address} showAddress={true}
                       width={500} height={500} zoom={15} />
                 <div className="row">
                     <div className="col-xs-12">

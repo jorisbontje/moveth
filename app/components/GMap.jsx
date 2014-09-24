@@ -12,7 +12,8 @@ var GMap = React.createClass({
         return {
             geocoder: null,
             map: null,
-            marker: null
+            marker: null,
+            watch: null
         };
     },
 
@@ -25,7 +26,9 @@ var GMap = React.createClass({
             zoom: 4,
             width: 500,
             height: 500,
-            gmaps_api_key: ''
+            gmaps_api_key: '',
+            showAddress: false,
+            watch: false
         };
     },
 
@@ -66,13 +69,14 @@ var GMap = React.createClass({
 
         return (
                 <div>
-                    <div className="row">
-                        <div className="col-xs-12">
-                            <p><i className="fa fa-location-arrow"></i>
-                            {' '}
-                            Pickup location: <strong>{this.props.address}</strong></p>
-                        </div>
-                    </div>
+                    {this.props.showAddress &&
+                        <div className="row">
+                            <div className="col-xs-12">
+                                <p><i className="fa fa-location-arrow"></i>
+                                {' '}
+                                Pickup location: <strong>{this.props.address}</strong></p>
+                            </div>
+                        </div>}
                     <div className="row">
                         <div className="col-xs-12">
                             <div ref="map" style={style}></div>
@@ -121,7 +125,18 @@ var GMap = React.createClass({
         }
 
         if (this.props.onLocationChange) {
-            navigator.geolocation.getCurrentPosition(this.geoSuccess, this.geoError);
+            if (this.props.watch) {
+                var watch = navigator.geolocation.watchPosition(this.geoSuccess, this.geoError);
+                this.setState({watch: watch});
+            } else {
+                navigator.geolocation.getCurrentPosition(this.geoSuccess, this.geoError);
+            }
+        }
+    },
+
+    componentWillUnmount: function() {
+        if (this.state.watch) {
+            navigator.geolocation.clearWatch(this.state.watch);
         }
     },
 
