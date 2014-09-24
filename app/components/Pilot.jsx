@@ -46,32 +46,35 @@ var Pilot = React.createClass({
         );
     },
 
+    componentDidMount: function() {
+        setInterval(this.track, this.props.trackInterval);
+    },
+
     onLocationChange: function(latitude, longitude) {
         console.log("location changed", latitude, longitude);
         localStorage["moveth:lat"] = latitude;
         localStorage["moveth:long"] = longitude;
         this.setState({latitude: latitude, longitude: longitude});
-
-        if (this.state.online) {
-            this.track();
-        }
+        this.track();
     },
 
     onGoOnline: function() {
-        console.log("go online");
+        console.log("going online");
         this.setState({online: true});
         this.track();
     },
 
     onGoOffline: function() {
-        console.log("go offline");
+        console.log("going offline");
         this.setState({online: false});
         this.props.client.pilotOffline(Date.now());
     },
 
     track: function() {
-        console.log("tracking location");
-        this.props.client.trackPilotLocation(this.state.latitude, this.state.longitude, Date.now());
+        if (this.state.online) {
+            console.log("updating tracking location");
+            this.props.client.trackPilotLocation(this.state.latitude, this.state.longitude, Date.now());
+        }
     }
 });
 
