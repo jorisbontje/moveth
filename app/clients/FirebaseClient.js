@@ -14,6 +14,23 @@ var FirebaseClient = function(firebaseRef) {
         _firebaseRef.child('pilot').child(uid).update({lastSeen: lastSeen, online: false});
     };
 
+    this.registerPilotDisconnect = function() {
+        var uid = this.UID();
+        _firebaseRef.child('pilot').child(uid).onDisconnect().update({online: false});
+    };
+
+    this.listenPilots = function(callback) {
+        var uid = this.UID();
+        _firebaseRef.child('pilot').on('value', function(data) {
+            var pilots = data.val();
+            callback(pilots);
+        });
+    };
+
+    this.unlistenPilots = function() {
+        // TODO
+    };
+
     this.UID = function() {
         /* global localStorage */
         var uidKey = 'moveth:uid';

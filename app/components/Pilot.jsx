@@ -48,6 +48,7 @@ var Pilot = React.createClass({
 
     componentDidMount: function() {
         setInterval(this.track, this.props.trackInterval);
+        this.props.client.registerPilotDisconnect();
     },
 
     onLocationChange: function(latitude, longitude) {
@@ -61,7 +62,7 @@ var Pilot = React.createClass({
     onGoOnline: function() {
         console.log("going online");
         this.setState({online: true});
-        this.track();
+        this.track(true);
     },
 
     onGoOffline: function() {
@@ -70,8 +71,8 @@ var Pilot = React.createClass({
         this.props.client.pilotOffline(Date.now());
     },
 
-    track: function() {
-        if (this.state.online) {
+    track: function(force) {
+        if (force || this.state.online) {
             console.log("updating tracking location");
             this.props.client.trackPilotLocation(this.state.latitude, this.state.longitude, Date.now());
         }

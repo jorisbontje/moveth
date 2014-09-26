@@ -125,11 +125,12 @@ var GMap = React.createClass({
         }
 
         if (this.props.onLocationChange) {
+            var geoOptions = {enableHighAccuracy: true, maximumAge: 60000, timeout: 15000};
             if (this.props.watch) {
-                var watch = navigator.geolocation.watchPosition(this.geoSuccess, this.geoError);
+                var watch = navigator.geolocation.watchPosition(this.geoSuccess, this.geoError, geoOptions);
                 this.setState({watch: watch});
             } else {
-                navigator.geolocation.getCurrentPosition(this.geoSuccess, this.geoError);
+                navigator.geolocation.getCurrentPosition(this.geoSuccess, this.geoError, geoOptions);
             }
         }
     },
