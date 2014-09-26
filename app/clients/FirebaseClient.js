@@ -20,7 +20,6 @@ var FirebaseClient = function(firebaseRef) {
     };
 
     this.listenPilots = function(callback) {
-        var uid = this.UID();
         _firebaseRef.child('pilot').on('value', function(data) {
             var pilots = data.val();
             callback(pilots);
