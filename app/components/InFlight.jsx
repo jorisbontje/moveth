@@ -10,11 +10,26 @@ var GMap = require("./GMap");
 
 var MAX_LAST_SEEN = 600000;
 
+var PilotItem = React.createClass({
+    render: function() {
+        return (
+            <li>
+                id={this.props.pilot.id} distance={this.props.pilot.distance} lastSeen={this.props.pilot.lastSeen} age={this.props.pilot.age}
+                <button type="button" className="btn btn-success" onClick={this.onPing}>Ping</button>
+            </li>
+        );
+    },
+
+    onPing: function() {
+        console.log("ping", this.props.pilot.id);
+    }
+});
+
 var PilotsList = React.createClass({
     render: function() {
         var pilotsListNodes = this.props.pilots.map(function(pilot) {
             return (
-                <li key={pilot.id}>id={pilot.id} distance={pilot.distance} lastSeen={pilot.lastSeen} age={pilot.age}</li>
+                <PilotItem key={pilot.id} pilot={pilot} />
             );
         });
 
