@@ -30,6 +30,10 @@ var FirebaseClient = function(firebaseRef) {
         _firebaseRef.child('pilot').off('value');
     };
 
+    this.pingPilot = function(pilotId) {
+        console.log("hi pilot", pilotId);
+    };
+
     this.UID = function() {
         /* global localStorage */
         var uidKey = 'moveth:uid';

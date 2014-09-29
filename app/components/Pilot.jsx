@@ -6,6 +6,10 @@ var Router = require("react-router");
 var GMap = require("./GMap");
 
 var Pilot = React.createClass({
+    contextTypes: {
+        client: React.PropTypes.object
+    },
+
     getInitialState: function() {
         return {
             latitude: parseFloat(localStorage["moveth:lat"]) || 51.521048,
@@ -42,7 +46,7 @@ var Pilot = React.createClass({
                             <button type="button" className="btn btn-info" onClick={this.onGoOnline}>Go Online</button>
                         }
                         <hr />
-                        <p>UID: {this.props.client.UID()}</p>
+                        <p>UID: {this.context.client.UID()}</p>
                         <p>Lat: {this.state.latitude} Long: {this.state.longitude}</p>
                     </div>
                 </div>
@@ -52,7 +56,7 @@ var Pilot = React.createClass({
 
     componentDidMount: function() {
         setInterval(this.track, this.props.trackInterval);
-        this.props.client.registerPilotDisconnect();
+        this.context.client.registerPilotDisconnect();
     },
 
     onToClient: function() {
@@ -76,13 +80,13 @@ var Pilot = React.createClass({
     onGoOffline: function() {
         console.log("going offline");
         this.setState({online: false});
-        this.props.client.pilotOffline(Date.now());
+        this.context.client.pilotOffline(Date.now());
     },
 
     track: function(force) {
         if (force || this.state.online) {
             console.log("updating tracking location");
-            this.props.client.trackPilotLocation(this.state.latitude, this.state.longitude, Date.now());
+            this.context.client.trackPilotLocation(this.state.latitude, this.state.longitude, Date.now());
         }
     }
 });

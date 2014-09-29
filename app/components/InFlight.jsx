@@ -11,6 +11,10 @@ var GMap = require("./GMap");
 var MAX_LAST_SEEN = 600000;
 
 var PilotItem = React.createClass({
+    contextTypes: {
+        client: React.PropTypes.object
+    },
+
     render: function() {
         return (
             <li>
@@ -22,6 +26,7 @@ var PilotItem = React.createClass({
 
     onPing: function() {
         console.log("ping", this.props.pilot.id);
+        this.context.client.pingPilot(this.props.pilot.id);
     }
 });
 
@@ -42,6 +47,10 @@ var PilotsList = React.createClass({
 });
 
 var InFlight = React.createClass({
+    contextTypes: {
+        client: React.PropTypes.object
+    },
+
     getInitialState: function() {
         return {
             searching: true,
@@ -103,11 +112,11 @@ var InFlight = React.createClass({
     },
 
     componentDidMount: function() {
-        this.props.client.listenPilots(this.onPilotsUpdate);
+        this.context.client.listenPilots(this.onPilotsUpdate);
     },
 
     componentWillUnmount: function() {
-        this.props.client.unlistenPilots();
+        this.context.client.unlistenPilots();
     },
 
     onCall: function() {
