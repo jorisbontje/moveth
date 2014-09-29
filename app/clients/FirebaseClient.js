@@ -27,7 +27,7 @@ var FirebaseClient = function(firebaseRef) {
     };
 
     this.unlistenPilots = function() {
-        // TODO
+        _firebaseRef.child('pilot').off('value');
     };
 
     this.UID = function() {

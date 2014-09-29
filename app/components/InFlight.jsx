@@ -8,7 +8,7 @@ var _ = require("lodash");
 
 var GMap = require("./GMap");
 
-
+var MAX_LAST_SEEN = 600000;
 
 var PilotsList = React.createClass({
     render: function() {
@@ -64,25 +64,27 @@ var InFlight = React.createClass({
     },
 
     onPilotsUpdate: function(pilots) {
-        console.log("UPDATE", pilots);
-        var clientPos = {latitude: parseFloat(this.props.params.latitude),
-                         longitude: parseFloat(this.props.params.longitude)};
-        var now = Date.now();
+        console.log("UPDATE PILOTS", pilots);
+        if (this.isMounted()) {
+            var clientPos = {latitude: parseFloat(this.props.params.latitude),
+                             longitude: parseFloat(this.props.params.longitude)};
+            var now = Date.now();
 
-        var activePilots = _.chain(pilots)
-                       .mapValues(function(val, key) {
-                            val.id = key;
-                            val.distance = geolib.getDistance(clientPos, val);
-                            val.age = now - val.lastSeen;
-                            return val;
-                        })
-                       .filter(function(pilot) {
-                           return pilot.online && now - pilot.lastSeen < 600000;
-                       })
-                       .sortBy('distance')
-                       .value();
+            var activePilots = _.chain(pilots)
+                           .mapValues(function(val, key) {
+                                val.id = key;
+                                val.distance = geolib.getDistance(clientPos, val);
+                                val.age = now - val.lastSeen;
+                                return val;
+                            })
+                           .filter(function(pilot) {
+                               return pilot.online && now - pilot.lastSeen < MAX_LAST_SEEN;
+                           })
+                           .sortBy('distance')
+                           .value();
 
-        this.setState({activePilots: activePilots});
+            this.setState({activePilots: activePilots});
+        }
     },
 
     componentDidMount: function() {
