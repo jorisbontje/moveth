@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 
 var React = require("react");
+var Router = require("react-router");
 
 var GMap = require("./GMap");
 
@@ -17,7 +18,7 @@ var Pilot = React.createClass({
         return (
             <div className="client">
                 <div className="row">
-                    <div className="col-xs-12">
+                    <div className="col-xs-10">
                         <h1>movETH - Pilot
                         {' '}
                         {this.state.online ?
@@ -26,6 +27,9 @@ var Pilot = React.createClass({
                             <span className="label label-danger">Offline</span>
                         }
                         </h1>
+                    </div>
+                    <div className="col-xs-2">
+                        <button type="button" className="btn btn-default" onClick={this.onToClient}>To Client</button>
                     </div>
                 </div>
                 <GMap latitude={this.state.latitude} longitude={this.state.longitude} watch={true}
@@ -49,6 +53,10 @@ var Pilot = React.createClass({
     componentDidMount: function() {
         setInterval(this.track, this.props.trackInterval);
         this.props.client.registerPilotDisconnect();
+    },
+
+    onToClient: function() {
+        Router.transitionTo('client');
     },
 
     onLocationChange: function(latitude, longitude) {

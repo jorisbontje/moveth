@@ -18,8 +18,11 @@ var Client = React.createClass({
         return (
             <div className="client">
                 <div className="row">
-                    <div className="col-xs-12">
+                    <div className="col-xs-10">
                         <h1>movETH</h1>
+                    </div>
+                    <div className="col-xs-2">
+                        <button type="button" className="btn btn-default" onClick={this.onToPilot}>To Pilot</button>
                     </div>
                 </div>
                 <GMap latitude={this.state.latitude} longitude={this.state.longitude} address={this.state.address} showAddress={true}
@@ -34,6 +37,10 @@ var Client = React.createClass({
                 </div>
             </div>
         );
+    },
+
+    onToPilot: function() {
+        Router.transitionTo('pilot');
     },
 
     onLocationChange: function(latitude, longitude) {
