@@ -37,7 +37,7 @@ var routes = (
             <Redirect from="/" to="client" />
             <Route name="client" path="/client" handler={Client} />
             <Route name="confirmRequest" path="/request/:latitude,:longitude/:address" handler={ConfirmRequest} />
-            <Route name="inFlight" path="/flight/:flightId/:latitude,:longitude/:address" handler={InFlight} />
+            <Route name="inFlight" path="/flight/:flightId/:latitude,:longitude/:address" handler={InFlight} client={client} />
             <Route name="pilot" path="/pilot" handler={Pilot} client={client} trackInterval={60000} />
         </Route>
     </Routes>
