@@ -30,8 +30,12 @@ var FirebaseClient = function(firebaseRef) {
         _firebaseRef.child('pilot').off('value');
     };
 
-    this.pingPilot = function(pilotId) {
-        console.log("hi pilot", pilotId);
+    this.registerFlight = function(flightId, latitude, longitude) {
+        _firebaseRef.child('flight').child(flightId).set({flightId: flightId, latitude: latitude, longitude: longitude});
+    };
+
+    this.pingPilot = function(pilotId, flightId) {
+        _firebaseRef.child('pilot').child(pilotId).child('requests').push({flightId: flightId});
     };
 
     this.UID = function() {

@@ -26,7 +26,7 @@ var PilotItem = React.createClass({
 
     onPing: function() {
         console.log("ping", this.props.pilot.id);
-        this.context.client.pingPilot(this.props.pilot.id);
+        this.context.client.pingPilot(this.props.pilot.id, this.props.flightId);
     }
 });
 
@@ -34,9 +34,9 @@ var PilotsList = React.createClass({
     render: function() {
         var pilotsListNodes = this.props.pilots.map(function(pilot) {
             return (
-                <PilotItem key={pilot.id} pilot={pilot} />
+                <PilotItem key={pilot.id} pilot={pilot} flightId={this.props.flightId} />
             );
-        });
+        }.bind(this));
 
         return (
             <ul>
@@ -80,7 +80,7 @@ var InFlight = React.createClass({
                         <hr />
                         <p>Flight ID: {flightId}</p>
                         <p>Nr Pilots: {_.size(this.state.activePilots)}</p>
-                        <PilotsList pilots={this.state.activePilots} />
+                        <PilotsList pilots={this.state.activePilots} flightId={flightId} />
                     </div>
                 </div>
             </div>
