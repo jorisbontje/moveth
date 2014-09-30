@@ -1,8 +1,8 @@
-var crypto = require('crypto');
+var secureRandom = require('secure-random');
 
 var utils = {
   randomId: function() {
-      return crypto.randomBytes(32).toString('hex');
+      return secureRandom.randomBuffer(32).toString('hex');
   },
 };
 
