@@ -53,7 +53,6 @@ var FirebaseClient = function(firebaseRef) {
     };
 
     this.listenFlightInfo = function(flightId, callback) {
-        var uid = this.UID();
         _firebaseRef.child('flight').child(flightId).on('value', function(data) {
             var flight = data.val();
             flight.id = flightId;
