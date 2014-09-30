@@ -97,12 +97,14 @@ var InFlight = React.createClass({
             var activePilots = _.chain(pilots)
                            .mapValues(function(val, key) {
                                 val.id = key;
-                                val.distance = geolib.getDistance(clientPos, val);
                                 val.age = now - val.lastSeen;
+                                if (_.has(val, 'latitude') && _.has(val, 'longitude')) {
+                                    val.distance = geolib.getDistance(clientPos, val);
+                                }
                                 return val;
                             })
                            .filter(function(pilot) {
-                               return pilot.online && now - pilot.lastSeen < MAX_LAST_SEEN;
+                               return pilot.online && now - pilot.lastSeen < MAX_LAST_SEEN && _.has(pilot, 'distance');
                            })
                            .sortBy('distance')
                            .value();
