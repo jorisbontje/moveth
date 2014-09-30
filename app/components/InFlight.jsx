@@ -6,45 +6,11 @@ var Router = require("react-router");
 var geolib = require("geolib");
 var _ = require("lodash");
 
+var FlightInfo = require("./FlightInfo");
 var GMap = require("./GMap");
+var PilotsList = require("./PilotsList");
 
 var MAX_LAST_SEEN = 600000;
-
-var PilotItem = React.createClass({
-    contextTypes: {
-        client: React.PropTypes.object
-    },
-
-    render: function() {
-        return (
-            <li>
-                id={this.props.pilot.id} distance={this.props.pilot.distance} lastSeen={this.props.pilot.lastSeen} age={this.props.pilot.age}
-                <button type="button" className="btn btn-success" onClick={this.onPing}>Ping</button>
-            </li>
-        );
-    },
-
-    onPing: function() {
-        console.log("ping", this.props.pilot.id);
-        this.context.client.pingPilot(this.props.pilot.id, this.props.flightId);
-    }
-});
-
-var PilotsList = React.createClass({
-    render: function() {
-        var pilotsListNodes = this.props.pilots.map(function(pilot) {
-            return (
-                <PilotItem key={pilot.id} pilot={pilot} flightId={this.props.flightId} />
-            );
-        }.bind(this));
-
-        return (
-            <ul>
-                {pilotsListNodes}
-            </ul>
-        );
-    }
-});
 
 var InFlight = React.createClass({
     contextTypes: {
@@ -78,8 +44,9 @@ var InFlight = React.createClass({
                         {!this.state.searching && <button type="button" className="btn btn-success" onClick={this.onCall}>Call Pilot</button>}
                         <button type="button" className="btn btn-danger" onClick={this.onCancel}>Cancel</button>
                         <hr />
-                        <p>Flight ID: {flightId}</p>
-                        <p>Nr Pilots: {_.size(this.state.activePilots)}</p>
+                        <FlightInfo flightId={flightId} />
+                        <hr />
+                        <p>Available Pilots: {_.size(this.state.activePilots)}</p>
                         <PilotsList pilots={this.state.activePilots} flightId={flightId} />
                     </div>
                 </div>
@@ -88,7 +55,6 @@ var InFlight = React.createClass({
     },
 
     onPilotsUpdate: function(pilots) {
-        console.log("UPDATE PILOTS", pilots);
         if (this.isMounted()) {
             var clientPos = {latitude: parseFloat(this.props.params.latitude),
                              longitude: parseFloat(this.props.params.longitude)};

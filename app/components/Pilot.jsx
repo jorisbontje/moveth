@@ -3,20 +3,8 @@
 var React = require("react");
 var Router = require("react-router");
 
+var FlightInfo = require("./FlightInfo");
 var GMap = require("./GMap");
-
-var FlightInfo= React.createClass({
-    render: function() {
-        return (
-            <div>
-            <h2>Flight Info</h2>
-            id={this.props.flight.id}
-            {' '}
-            Pickup latitude={this.props.flight.latitude} longitude={this.props.flight.longitude}
-            </div>
-        );
-    }
-});
 
 var Pilot = React.createClass({
     contextTypes: {
@@ -28,8 +16,7 @@ var Pilot = React.createClass({
             latitude: parseFloat(localStorage["moveth:lat"]) || 51.521048,
             longitude: parseFloat(localStorage["moveth:long"] ) || 0.051374,
             online: false,
-            flightId: null,
-            flight: null
+            flightId: null
         };
     },
 
@@ -63,7 +50,7 @@ var Pilot = React.createClass({
                         <hr />
                         <p>UID: {this.context.client.UID()}</p>
                         <p>Lat: {this.state.latitude} Long: {this.state.longitude}</p>
-                        {this.state.flight && <FlightInfo flight={this.state.flight} />}
+                        <FlightInfo flightId={this.state.flightId} />
                     </div>
                 </div>
             </div>
@@ -78,9 +65,6 @@ var Pilot = React.createClass({
 
     componentWillUnmount: function() {
         this.context.client.unlistenFlightRequests();
-        if (this.state.flightId) {
-            this.context.client.unlistenFlightInfo(this.state.flightId);
-        }
     },
 
     onToClient: function() {
@@ -99,14 +83,9 @@ var Pilot = React.createClass({
         if (this.state.online) {
             console.log("Incoming flight request", flightId);
             this.setState({flightId: flightId});
-            this.context.client.listenFlightInfo(flightId, this.onFlightInfo);
         } else {
             console.log("Dismissing flight request since we are offline", flightId);
         }
-    },
-
-    onFlightInfo: function(flight) {
-        this.setState({flight: flight});
     },
 
     onGoOnline: function() {
@@ -118,10 +97,7 @@ var Pilot = React.createClass({
     onGoOffline: function() {
         console.log("going offline");
         this.context.client.pilotOffline(Date.now());
-        if (this.state.flightId) {
-            this.context.client.unlistenFlightInfo(this.state.flightId);
-        }
-        this.setState({online: false, flightId: null, flight: null});
+        this.setState({online: false, flightId: null});
     },
 
     trackLocation: function(force) {

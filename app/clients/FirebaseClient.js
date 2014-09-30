@@ -53,6 +53,9 @@ var FirebaseClient = function(firebaseRef) {
     };
 
     this.listenFlightInfo = function(flightId, callback) {
+        if (!flightId) {
+            return;
+        }
         _firebaseRef.child('flight').child(flightId).on('value', function(data) {
             var flight = data.val();
             flight.id = flightId;
@@ -61,6 +64,9 @@ var FirebaseClient = function(firebaseRef) {
     };
 
     this.unlistenFlightInfo = function(flightId) {
+        if (!flightId) {
+            return;
+        }
         _firebaseRef.child('flight').child(flightId).off('value');
     };
 
