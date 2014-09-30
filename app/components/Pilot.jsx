@@ -5,6 +5,19 @@ var Router = require("react-router");
 
 var GMap = require("./GMap");
 
+var FlightInfo= React.createClass({
+    render: function() {
+        return (
+            <div>
+            <h2>Flight Info</h2>
+            id={this.props.flight.id}
+            {' '}
+            Pickup latitude={this.props.flight.latitude} longitude={this.props.flight.longitude}
+            </div>
+        );
+    }
+});
+
 var Pilot = React.createClass({
     contextTypes: {
         client: React.PropTypes.object
@@ -14,7 +27,9 @@ var Pilot = React.createClass({
         return {
             latitude: parseFloat(localStorage["moveth:lat"]) || 51.521048,
             longitude: parseFloat(localStorage["moveth:long"] ) || 0.051374,
-            online: false
+            online: false,
+            flightId: null,
+            flight: null
         };
     },
 
@@ -48,6 +63,7 @@ var Pilot = React.createClass({
                         <hr />
                         <p>UID: {this.context.client.UID()}</p>
                         <p>Lat: {this.state.latitude} Long: {this.state.longitude}</p>
+                        {this.state.flight && <FlightInfo flight={this.state.flight} />}
                     </div>
                 </div>
             </div>
@@ -55,13 +71,16 @@ var Pilot = React.createClass({
     },
 
     componentDidMount: function() {
-        setInterval(this.track, this.props.trackInterval);
+        setInterval(this.trackLocation, this.props.trackInterval);
         this.context.client.registerPilotDisconnect();
         this.context.client.listenFlightRequests(this.onFlightRequest);
     },
 
     componentWillUnmount: function() {
         this.context.client.unlistenFlightRequests();
+        if (this.state.flightId) {
+            this.context.client.unlistenFlightInfo(this.state.flightId);
+        }
     },
 
     onToClient: function() {
@@ -73,30 +92,39 @@ var Pilot = React.createClass({
         localStorage["moveth:lat"] = latitude;
         localStorage["moveth:long"] = longitude;
         this.setState({latitude: latitude, longitude: longitude});
-        this.track();
+        this.trackLocation();
     },
 
     onFlightRequest: function(flightId) {
         if (this.state.online) {
-            console.log("Flight request", flightId);
+            console.log("Incoming flight request", flightId);
+            this.setState({flightId: flightId});
+            this.context.client.listenFlightInfo(flightId, this.onFlightInfo);
         } else {
             console.log("Dismissing flight request since we are offline", flightId);
         }
     },
 
+    onFlightInfo: function(flight) {
+        this.setState({flight: flight});
+    },
+
     onGoOnline: function() {
         console.log("going online");
         this.setState({online: true});
-        this.track(true);
+        this.trackLocation(true);
     },
 
     onGoOffline: function() {
         console.log("going offline");
-        this.setState({online: false});
         this.context.client.pilotOffline(Date.now());
+        if (this.state.flightId) {
+            this.context.client.unlistenFlightInfo(this.state.flightId);
+        }
+        this.setState({online: false, flightId: null, flight: null});
     },
 
-    track: function(force) {
+    trackLocation: function(force) {
         if (force || this.state.online) {
             console.log("updating tracking location");
             this.context.client.trackPilotLocation(this.state.latitude, this.state.longitude, Date.now());

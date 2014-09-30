@@ -52,6 +52,19 @@ var FirebaseClient = function(firebaseRef) {
         _firebaseRef.child('pilot').child(uid).child('requests').off('child_added');
     };
 
+    this.listenFlightInfo = function(flightId, callback) {
+        var uid = this.UID();
+        _firebaseRef.child('flight').child(flightId).on('value', function(data) {
+            var flight = data.val();
+            flight.id = flightId;
+            callback(flight);
+        });
+    };
+
+    this.unlistenFlightInfo = function(flightId) {
+        _firebaseRef.child('flight').child(flightId).off('value');
+    };
+
     this.UID = function() {
         /* global localStorage */
         var uidKey = 'moveth:uid';
