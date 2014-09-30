@@ -9,7 +9,7 @@ var FlightInfo = React.createClass({
 
     getInitialState: function() {
         return {
-            flight: {}
+            flight: {},
         };
     },
 
@@ -24,6 +24,14 @@ var FlightInfo = React.createClass({
                 id={this.props.flightId}
                 {' '}
                 Pickup latitude={this.state.flight.latitude} longitude={this.state.flight.longitude}
+                {' '}
+                Pilot={this.state.flight.pilotId}
+                {this.props.isPilot && !this.state.flight.pilotId &&
+                    <div>
+                        <button type="button" className="btn btn-success" onClick={this.props.onAccept}>Accept</button>
+                        <button type="button" className="btn btn-danger" onClick={this.props.onReject}>Reject</button>
+                    </div>
+                }
             </div>
         );
     },
@@ -43,7 +51,7 @@ var FlightInfo = React.createClass({
 
     onFlightInfo: function(flight) {
         this.setState({flight: flight});
-    },
+    }
 });
 
 module.exports = FlightInfo;

@@ -50,7 +50,7 @@ var Pilot = React.createClass({
                         <hr />
                         <p>UID: {this.context.client.UID()}</p>
                         <p>Lat: {this.state.latitude} Long: {this.state.longitude}</p>
-                        <FlightInfo flightId={this.state.flightId} />
+                        <FlightInfo flightId={this.state.flightId} isPilot={true} onAccept={this.onAccept} onReject={this.onReject} />
                     </div>
                 </div>
             </div>
@@ -86,6 +86,15 @@ var Pilot = React.createClass({
         } else {
             console.log("Dismissing flight request since we are offline", flightId);
         }
+    },
+
+    onAccept: function() {
+        this.context.client.acceptFlight(this.state.flightId);
+    },
+
+    onReject: function() {
+        this.context.client.rejectFlight(this.state.flightId);
+        this.setState({flightId: null});
     },
 
     onGoOnline: function() {
