@@ -64,6 +64,10 @@ var InFlight = React.createClass({
     onCancel: function() {
         Router.transitionTo('client');
     },
+
+    onComplete: function() {
+        Router.transitionTo('receipt', {flightId: this.state.flightId, role: 'client'});
+    }
 });
 
 module.exports = InFlight;

@@ -13,6 +13,7 @@ var Client = require("./components/Client");
 var ConfirmRequest = require("./components/ConfirmRequest");
 var InFlight = require("./components/InFlight");
 var Pilot = require("./components/Pilot");
+var Receipt = require("./components/Receipt");
 
 // Load jQuery and bootstrap
 var jQuery = require("jquery");
@@ -39,6 +40,7 @@ var routes = (
             <Route name="confirmRequest" path="/request/:latitude,:longitude/:address" handler={ConfirmRequest} />
             <Route name="inFlight" path="/flight/:flightId/:latitude,:longitude/:address" handler={InFlight} />
             <Route name="pilot" path="/pilot" handler={Pilot} trackInterval={60000} />
+            <Route name="receipt" path="/receipt/:flightId/:role" handler={Receipt} />
         </Route>
     </Routes>
 );

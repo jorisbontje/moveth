@@ -31,7 +31,8 @@ var FirebaseClient = function(firebaseRef) {
     };
 
     this.registerFlight = function(flightId, latitude, longitude) {
-        _firebaseRef.child('flight').child(flightId).set({flightId: flightId, latitude: latitude, longitude: longitude});
+        var uid = this.UID();
+        _firebaseRef.child('flight').child(flightId).set({flightId: flightId, latitude: latitude, longitude: longitude, clientId: uid});
     };
 
     this.acceptFlight = function(flightId) {
@@ -42,6 +43,10 @@ var FirebaseClient = function(firebaseRef) {
     this.rejectFlight = function(flightId) {
         var uid = this.UID();
         _firebaseRef.child('flight').child(flightId).child('rejects').push({pilotId: uid});
+    };
+
+    this.completeFlight = function(flightId) {
+        _firebaseRef.child('flight').child(flightId).update({completed: true});
     };
 
     this.pingPilot = function(pilotId, flightId) {

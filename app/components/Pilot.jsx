@@ -53,7 +53,7 @@ var Pilot = React.createClass({
                         <hr />
                         <p>UID: {this.context.client.UID()}</p>
                         <p>Lat: {this.state.latitude} Long: {this.state.longitude}</p>
-                        <FlightInfo flight={this.state.flight} isPilot={true} onAccept={this.onAccept} onReject={this.onReject} />
+                        <FlightInfo flight={this.state.flight} isPilot={true} onAccept={this.onAccept} onReject={this.onReject} onComplete={this.onComplete} />
                     </div>
                 </div>
             </div>
@@ -98,6 +98,12 @@ var Pilot = React.createClass({
     onReject: function() {
         this.context.client.rejectFlight(this.state.flightId);
         this.setState({flightId: null, flight: null});
+    },
+
+    onComplete: function() {
+        this.context.client.completeFlight(this.state.flightId);
+        this.context.client.pilotOffline(Date.now());
+        Router.transitionTo('receipt', {flightId: this.state.flightId, role: 'pilot'});
     },
 
     onGoOnline: function() {
