@@ -57,6 +57,11 @@ var Pilot = React.createClass({
     componentDidMount: function() {
         setInterval(this.track, this.props.trackInterval);
         this.context.client.registerPilotDisconnect();
+        this.context.client.listenFlightRequests(this.onFlightRequest);
+    },
+
+    componentWillUnmount: function() {
+        this.context.client.unlistenFlightRequests();
     },
 
     onToClient: function() {
@@ -69,6 +74,14 @@ var Pilot = React.createClass({
         localStorage["moveth:long"] = longitude;
         this.setState({latitude: latitude, longitude: longitude});
         this.track();
+    },
+
+    onFlightRequest: function(flightId) {
+        if (this.state.online) {
+            console.log("Flight request", flightId);
+        } else {
+            console.log("Dismissing flight request since we are offline", flightId);
+        }
     },
 
     onGoOnline: function() {
