@@ -18,10 +18,10 @@ var Client = React.createClass({
         return (
             <div className="client">
                 <div className="row">
-                    <div className="col-xs-10">
+                    <div className="col-xs-9">
                         <h1>movETH</h1>
                     </div>
-                    <div className="col-xs-2">
+                    <div className="col-xs-3">
                         <button type="button" className="btn btn-default" onClick={this.onToPilot}>To Pilot</button>
                     </div>
                 </div>

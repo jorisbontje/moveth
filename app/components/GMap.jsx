@@ -24,8 +24,8 @@ var GMap = React.createClass({
             longitude: 0,
             address: '',
             zoom: 15,
-            width: 320,
-            height: 320,
+            width: 340,
+            height: 340,
             gmaps_api_key: '',
             showAddress: false,
             watch: false
@@ -63,7 +63,6 @@ var GMap = React.createClass({
     render: function() {
 
         var style = {
-            width: this.props.width,
             height: this.props.height
         };
 
@@ -78,9 +77,7 @@ var GMap = React.createClass({
                             </div>
                         </div>}
                     <div className="row">
-                        <div className="col-xs-12">
-                            <div ref="map" style={style}></div>
-                        </div>
+                        <div className="col-xs-12" ref="map" style={style}></div>
                     </div>
                 </div>
                );
