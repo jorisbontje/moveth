@@ -4,9 +4,12 @@ var React = require("react");
 var Router = require("react-router");
 
 var FlightInfo = require("./FlightInfo");
+var FlightInfoMixin = require("./FlightInfoMixin");
 var GMap = require("./GMap");
 
 var Pilot = React.createClass({
+    mixins: [FlightInfoMixin],
+
     contextTypes: {
         client: React.PropTypes.object
     },
@@ -50,7 +53,7 @@ var Pilot = React.createClass({
                         <hr />
                         <p>UID: {this.context.client.UID()}</p>
                         <p>Lat: {this.state.latitude} Long: {this.state.longitude}</p>
-                        <FlightInfo flightId={this.state.flightId} isPilot={true} onAccept={this.onAccept} onReject={this.onReject} />
+                        <FlightInfo flight={this.state.flight} isPilot={true} onAccept={this.onAccept} onReject={this.onReject} />
                     </div>
                 </div>
             </div>
@@ -94,7 +97,7 @@ var Pilot = React.createClass({
 
     onReject: function() {
         this.context.client.rejectFlight(this.state.flightId);
-        this.setState({flightId: null});
+        this.setState({flightId: null, flight: null});
     },
 
     onGoOnline: function() {

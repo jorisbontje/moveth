@@ -3,30 +3,21 @@
 var React = require("react");
 
 var FlightInfo = React.createClass({
-    contextTypes: {
-        client: React.PropTypes.object
-    },
-
-    getInitialState: function() {
-        return {
-            flight: {},
-        };
-    },
 
     render: function() {
-        if (!this.props.flightId) {
+        if (!this.props.flight) {
             return null;
         }
 
         return (
             <div>
                 <h2>Flight Info</h2>
-                id={this.props.flightId}
+                id={this.props.flight.id}
                 {' '}
-                Pickup latitude={this.state.flight.latitude} longitude={this.state.flight.longitude}
+                Pickup latitude={this.props.flight.latitude} longitude={this.props.flight.longitude}
                 {' '}
-                Pilot={this.state.flight.pilotId}
-                {this.props.isPilot && !this.state.flight.pilotId &&
+                Pilot={this.props.flight.pilotId}
+                {this.props.isPilot && !this.props.flight.pilotId &&
                     <div>
                         <button type="button" className="btn btn-success" onClick={this.props.onAccept}>Accept</button>
                         <button type="button" className="btn btn-danger" onClick={this.props.onReject}>Reject</button>
@@ -34,23 +25,6 @@ var FlightInfo = React.createClass({
                 }
             </div>
         );
-    },
-
-    componentDidMount: function() {
-        this.context.client.listenFlightInfo(this.props.flightId, this.onFlightInfo);
-    },
-
-    componentWillUnmount: function() {
-        this.context.client.unlistenFlightInfo(this.props.flightId);
-    },
-
-    componentWillReceiveProps: function(props) {
-        this.context.client.unlistenFlightInfo(this.props.flightId);
-        this.context.client.listenFlightInfo(props.flightId, this.onFlightInfo);
-    },
-
-    onFlightInfo: function(flight) {
-        this.setState({flight: flight});
     }
 });
 

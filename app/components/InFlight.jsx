@@ -7,12 +7,15 @@ var geolib = require("geolib");
 var _ = require("lodash");
 
 var FlightInfo = require("./FlightInfo");
+var FlightInfoMixin = require("./FlightInfoMixin");
 var GMap = require("./GMap");
 var PilotsList = require("./PilotsList");
 
 var MAX_LAST_SEEN = 600000;
 
 var InFlight = React.createClass({
+    mixins: [FlightInfoMixin],
+
     contextTypes: {
         client: React.PropTypes.object
     },
@@ -20,14 +23,14 @@ var InFlight = React.createClass({
     getInitialState: function() {
         return {
             searching: true,
-            activePilots: []
+            activePilots: [],
+            flightId: null
         };
     },
 
     render: function() {
         var latitude = parseFloat(this.props.params.latitude);
         var longitude = parseFloat(this.props.params.longitude);
-        var flightId = this.props.params.flightId;
 
         return (
             <div className="client">
@@ -44,10 +47,10 @@ var InFlight = React.createClass({
                         {!this.state.searching && <button type="button" className="btn btn-success" onClick={this.onCall}>Call Pilot</button>}
                         <button type="button" className="btn btn-danger" onClick={this.onCancel}>Cancel</button>
                         <hr />
-                        <FlightInfo flightId={flightId} />
+                        <FlightInfo flight={this.state.flight} />
                         <hr />
                         <p>Available Pilots: {_.size(this.state.activePilots)}</p>
-                        <PilotsList pilots={this.state.activePilots} flightId={flightId} />
+                        <PilotsList pilots={this.state.activePilots} flightId={this.state.flightId} />
                     </div>
                 </div>
             </div>
@@ -81,6 +84,7 @@ var InFlight = React.createClass({
 
     componentDidMount: function() {
         this.context.client.listenPilots(this.onPilotsUpdate);
+        this.setState({flightId: this.props.params.flightId});
     },
 
     componentWillUnmount: function() {
