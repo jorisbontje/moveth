@@ -26,7 +26,7 @@ var Client = React.createClass({
                     </div>
                 </div>
                 <GMap latitude={this.state.latitude} longitude={this.state.longitude} address={this.state.address} showAddress={true} watch={true}
-                      width={500} height={500} zoom={15} onLocationChange={this.onLocationChange} onAddressChange={this.onAddressChange} />
+                      onLocationChange={this.onLocationChange} onAddressChange={this.onAddressChange} />
                 <div className="row">
                     <div className="col-xs-12">
                         <p>We have X pilots in your area.</p>

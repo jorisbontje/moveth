@@ -23,9 +23,9 @@ var GMap = React.createClass({
             latitude: 0,
             longitude: 0,
             address: '',
-            zoom: 4,
-            width: 500,
-            height: 500,
+            zoom: 15,
+            width: 320,
+            height: 320,
             gmaps_api_key: '',
             showAddress: false,
             watch: false

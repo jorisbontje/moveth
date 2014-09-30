@@ -41,8 +41,7 @@ var Pilot = React.createClass({
                         <button type="button" className="btn btn-default" onClick={this.onToClient}>To Client</button>
                     </div>
                 </div>
-                <GMap latitude={this.state.latitude} longitude={this.state.longitude} watch={true}
-                      width={500} height={500} zoom={15} onLocationChange={this.onLocationChange} />
+                <GMap latitude={this.state.latitude} longitude={this.state.longitude} watch={true} onLocationChange={this.onLocationChange} />
                 <div className="row">
                     <div className="col-xs-12">
                         {this.state.online ?
