@@ -48,9 +48,13 @@ var InFlight = React.createClass({
                         <button type="button" className="btn btn-danger" onClick={this.onCancel}>Cancel</button>
                         <hr />
                         <FlightInfo flight={this.state.flight} />
-                        <hr />
-                        <p>Available Pilots: {_.size(this.state.activePilots)}</p>
-                        <PilotsList pilots={this.state.activePilots} flightId={this.state.flightId} />
+                        {this.state.flight && !this.state.flight.pilotId &&
+                            <div>
+                                <hr />
+                                <p>Available Pilots: {_.size(this.state.activePilots)}</p>
+                                <PilotsList pilots={this.state.activePilots} flightId={this.state.flightId} />
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
