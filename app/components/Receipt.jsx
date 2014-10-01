@@ -9,14 +9,26 @@ var FlightInfoMixin = require("./FlightInfoMixin");
 var Receipt = React.createClass({
     mixins: [FlightInfoMixin],
 
+    contextTypes: {
+        client: React.PropTypes.object
+    },
+
     getInitialState: function() {
         return {
             flightId: null
         };
     },
 
+    isPilot: function() {
+        return this.props.params.role === 'pilot';
+    },
+
     render: function() {
-        var isPilot = this.props.params.role === 'pilot';
+        if (!this.state.flight) {
+            return null;
+        }
+        var isPilot = this.isPilot();
+        var showRating = (isPilot && !this.state.flight.rating.pilot) || (!isPilot && !this.state.flight.rating.client);
         return (
             <div className="client">
                 <div className="row">
@@ -26,16 +38,12 @@ var Receipt = React.createClass({
                         <h2>{isPilot ? 'You Received' : 'Receipt'}</h2>
                     </div>
                     <div className="col-xs-3">
-                        {isPilot ?
-                            <button type="button" className="btn btn-default" onClick={this.onToPilot}>To Pilot</button>
-                        :
-                            <button type="button" className="btn btn-default" onClick={this.onToClient}>To Client</button>
-                        }
+                        <button type="button" className="btn btn-default" onClick={this.onToMain}>To {isPilot ? 'Pilot' : 'Client'}</button>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-xs-12">
-                        USD 25
+                        USD {this.state.flight.cost}
                     </div>
                 </div>
                 <div className="row">
@@ -43,19 +51,23 @@ var Receipt = React.createClass({
                         <FlightInfo flight={this.state.flight} />
                     </div>
                 </div>
-                <div className="row">
-                    <div className="col-xs-12">
-                        <h2>Rate your flight</h2>
+                {showRating &&
+                    <div>
+                        <div className="row">
+                            <div className="col-xs-12">
+                                <h2>Rate your flight</h2>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-xs-1">
+                                <button type="button" className="btn btn-danger" onClick={this.onRateNegative}><i className="fa fa-thumbs-down"></i></button>
+                            </div>
+                            <div className="col-xs-11">
+                                <button type="button" className="btn btn-success" onClick={this.onRatePositive}><i className="fa fa-thumbs-up"></i></button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div className="row">
-                    <div className="col-xs-1">
-                        <button type="button" className="btn btn-danger"><i className="fa fa-thumbs-down"></i></button>
-                    </div>
-                    <div className="col-xs-11">
-                        <button type="button" className="btn btn-success"><i className="fa fa-thumbs-up"></i></button>
-                    </div>
-                </div>
+                }
             </div>
         );
     },
@@ -64,12 +76,22 @@ var Receipt = React.createClass({
         this.setState({flightId: this.props.params.flightId});
     },
 
-    onToClient: function() {
-        Router.transitionTo('client');
+    onRatePositive: function() {
+        this.context.client.rateFlight(this.state.flightId, this.isPilot(), 1);
+        this.onToMain();
     },
 
-    onToPilot: function() {
-        Router.transitionTo('pilot');
+    onRateNegative: function() {
+        this.context.client.rateFlight(this.state.flightId, this.isPilot(), -1);
+        this.onToMain();
+    },
+
+    onToMain: function() {
+        if (this.isPilot()) {
+            Router.transitionTo('pilot');
+        } else {
+            Router.transitionTo('client');
+        }
     }
 });
 

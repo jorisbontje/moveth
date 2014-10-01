@@ -49,6 +49,15 @@ var FirebaseClient = function(firebaseRef) {
         _firebaseRef.child('flight').child(flightId).update({completed: true});
     };
 
+    this.rateFlight = function(flightId, isPilot, rating) {
+        var ref = _firebaseRef.child('flight').child(flightId).child('rating');
+        if (isPilot) {
+            ref.update({pilot: rating});
+        } else {
+            ref.update({client: rating});
+        }
+    };
+
     this.pingPilot = function(pilotId, flightId) {
         _firebaseRef.child('pilot').child(pilotId).child('requests').push({flightId: flightId});
     };

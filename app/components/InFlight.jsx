@@ -11,10 +11,6 @@ var PilotFinder = require("./PilotFinder");
 var InFlight = React.createClass({
     mixins: [FlightInfoMixin],
 
-    contextTypes: {
-        client: React.PropTypes.object
-    },
-
     getInitialState: function() {
         return {
             flightId: null
