@@ -14,7 +14,9 @@ var FlightInfo = React.createClass({
                 <h2>Flight Info</h2>
                 <ul>
                     <li>id={this.props.flight.id}</li>
-                    <li>Pickup: latitude={this.props.flight.latitude} longitude={this.props.flight.longitude}</li>
+                    <li>Pickup: latitude={this.props.flight.pickup.latitude} longitude={this.props.flight.pickup.longitude}</li>
+                    {this.props.flight.dropoff &&
+                        <li>Dropoff: latitude={this.props.flight.dropoff.latitude} longitude={this.props.flight.dropoff.longitude}</li>}
                     <li>Client={this.props.flight.clientId}</li>
                     <li>Pilot={this.props.flight.pilotId}</li>
                 </ul>

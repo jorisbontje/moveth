@@ -60,7 +60,7 @@ var InFlight = React.createClass({
         Router.transitionTo('client');
     },
 
-    onComplete: function() {
+    onCompleteEvent: function() {
         Router.transitionTo('receipt', {flightId: this.state.flightId, role: 'client'});
     }
 });

@@ -33,9 +33,8 @@ var FlightInfoMixin = {
     onFlightInfo: function(flight) {
         this.setState({flight: flight});
 
-        // TODO for both client and pilot
-        if (flight.completed) {
-            this.onComplete();
+        if (flight.completed && this.onCompleteEvent) {
+            this.onCompleteEvent();
         }
     }
 };

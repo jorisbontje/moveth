@@ -38,21 +38,21 @@ var Pilot = React.createClass({
                         </h1>
                     </div>
                     <div className="col-xs-3">
-                        <button type="button" className="btn btn-default" onClick={this.onToClient}>To Client</button>
+                        <button type="button" className="btn btn-default" onClick={this.onToClientButton}>To Client</button>
                     </div>
                 </div>
                 <GMap latitude={this.state.latitude} longitude={this.state.longitude} watch={true} onLocationChange={this.onLocationChange} />
                 <div className="row">
                     <div className="col-xs-12">
                         {this.state.online ?
-                            <button type="button" className="btn btn-info" onClick={this.onGoOffline}>Go Offline</button>
+                            <button type="button" className="btn btn-info" onClick={this.onGoOfflineButton}>Go Offline</button>
                         :
-                            <button type="button" className="btn btn-info" onClick={this.onGoOnline}>Go Online</button>
+                            <button type="button" className="btn btn-info" onClick={this.onGoOnlineButton}>Go Online</button>
                         }
                         <hr />
                         <p>UID: {this.context.client.UID()}</p>
                         <p>Lat: {this.state.latitude} Long: {this.state.longitude}</p>
-                        <FlightInfo flight={this.state.flight} isPilot={true} onAccept={this.onAccept} onReject={this.onReject} onComplete={this.onComplete} />
+                        <FlightInfo flight={this.state.flight} isPilot={true} onAccept={this.onAcceptButton} onReject={this.onRejectButton} onComplete={this.onCompleteButton} />
                     </div>
                 </div>
             </div>
@@ -69,7 +69,7 @@ var Pilot = React.createClass({
         this.context.client.unlistenFlightRequests();
     },
 
-    onToClient: function() {
+    onToClientButton: function() {
         Router.transitionTo('client');
     },
 
@@ -90,28 +90,28 @@ var Pilot = React.createClass({
         }
     },
 
-    onAccept: function() {
+    onAcceptButton: function() {
         this.context.client.acceptFlight(this.state.flightId);
     },
 
-    onReject: function() {
+    onRejectButton: function() {
         this.context.client.rejectFlight(this.state.flightId);
         this.setState({flightId: null, flight: null});
     },
 
-    onComplete: function() {
-        this.context.client.completeFlight(this.state.flightId);
+    onCompleteButton: function() {
+        this.context.client.completeFlight(this.state.flightId, this.state.latitude, this.state.longitude);
         this.context.client.pilotOffline(Date.now());
         Router.transitionTo('receipt', {flightId: this.state.flightId, role: 'pilot'});
     },
 
-    onGoOnline: function() {
+    onGoOnlineButton: function() {
         console.log("going online");
         this.setState({online: true});
         this.trackLocation(true);
     },
 
-    onGoOffline: function() {
+    onGoOfflineButton: function() {
         console.log("going offline");
         this.context.client.pilotOffline(Date.now());
         this.setState({online: false, flightId: null});
