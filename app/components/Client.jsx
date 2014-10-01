@@ -4,6 +4,7 @@ var React = require("react");
 var Router = require("react-router");
 
 var GMap = require("./GMap");
+var PilotFinder = require("./PilotFinder");
 
 var Client = React.createClass({
     getInitialState: function() {
@@ -29,7 +30,7 @@ var Client = React.createClass({
                       onLocationChange={this.onLocationChange} onAddressChange={this.onAddressChange} />
                 <div className="row">
                     <div className="col-xs-12">
-                        <p>We have X pilots in your area.</p>
+                        <PilotFinder latitude={this.state.latitude} longitude={this.state.longitude} showSummary={true} />
                         <button type="button" className="btn btn-info" onClick={this.onRequest} >Request Airlift</button>
                         <hr />
                         <p>Lat: {this.state.latitude} Long: {this.state.longitude}</p>

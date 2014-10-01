@@ -48,6 +48,12 @@ var PilotFinder = React.createClass({
         client: React.PropTypes.object
     },
 
+    propTypes: {
+        flightId: React.PropTypes.string,
+        latitude: React.PropTypes.number.isRequired,
+        longitude: React.PropTypes.number.isRequired
+    },
+
     getInitialState: function() {
         return {
             activePilots: []
@@ -57,9 +63,10 @@ var PilotFinder = React.createClass({
     render: function() {
         return (
             <div>
-                <hr />
-                <p>Available Pilots: {_.size(this.state.activePilots)}</p>
-                <PilotsList pilots={this.state.activePilots} flightId={this.props.flightId} />
+                <p>We have {_.size(this.state.activePilots)} pilots in your area.</p>
+                {!this.props.showSummary &&
+                    <PilotsList pilots={this.state.activePilots} flightId={this.props.flightId} />
+                }
             </div>
         );
     },

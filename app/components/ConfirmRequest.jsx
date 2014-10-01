@@ -5,6 +5,7 @@ var Router = require("react-router");
 
 var utils = require("../utils");
 var GMap = require("./GMap");
+var PilotFinder = require("./PilotFinder");
 
 var ConfirmRequest = React.createClass({
     contextTypes: {
@@ -25,6 +26,7 @@ var ConfirmRequest = React.createClass({
                 <GMap latitude={latitude} longitude={longitude} address={this.props.params.address} showAddress={true} />
                 <div className="row">
                     <div className="col-xs-12">
+                        <PilotFinder latitude={latitude} longitude={longitude} showSummary={true} />
                         <p>Pick up time is approximately X min.</p>
                         <button type="button" className="btn btn-success" onClick={this.onConfirm}>Confirm Airlift</button>
                         <button type="button" className="btn btn-default" onClick={this.onCancel}>Cancel</button>
