@@ -2,6 +2,8 @@
 
 var React = require("react");
 
+var moment = require("moment");
+
 var FlightInfo = React.createClass({
 
     render: function() {
@@ -9,6 +11,10 @@ var FlightInfo = React.createClass({
             return null;
         }
 
+        var duration = null;
+        if (this.props.flight.dropoff) {
+            duration = moment(this.props.flight.dropoff.timestamp).diff(this.props.flight.pickup.timestamp, 'seconds');
+        }
         return (
             <div>
                 <h2>Flight Info</h2>
@@ -17,6 +23,7 @@ var FlightInfo = React.createClass({
                     <li>Pickup: latitude={this.props.flight.pickup.latitude} longitude={this.props.flight.pickup.longitude}</li>
                     {this.props.flight.dropoff &&
                         <li>Dropoff: latitude={this.props.flight.dropoff.latitude} longitude={this.props.flight.dropoff.longitude}</li>}
+                    <li>Duration={duration} seconds</li>
                     <li>Client={this.props.flight.clientId}</li>
                     <li>Pilot={this.props.flight.pilotId}</li>
                 </ul>

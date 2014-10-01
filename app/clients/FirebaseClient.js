@@ -32,7 +32,9 @@ var FirebaseClient = function(firebaseRef) {
 
     this.registerFlight = function(flightId, latitude, longitude) {
         var uid = this.UID();
-        _firebaseRef.child('flight').child(flightId).set({flightId: flightId, pickup: {latitude: latitude, longitude: longitude}, clientId: uid});
+        var now = Date.now();
+        var pickup = {latitude: latitude, longitude: longitude, timestamp: now};
+        _firebaseRef.child('flight').child(flightId).set({flightId: flightId, pickup: pickup, clientId: uid});
     };
 
     this.acceptFlight = function(flightId) {
@@ -46,7 +48,9 @@ var FirebaseClient = function(firebaseRef) {
     };
 
     this.completeFlight = function(flightId, latitude, longitude) {
-        _firebaseRef.child('flight').child(flightId).update({completed: true, dropoff: {latitude: latitude, longitude: longitude}});
+        var now = Date.now();
+        var dropoff = {latitude: latitude, longitude: longitude, timestamp: now};
+        _firebaseRef.child('flight').child(flightId).update({completed: true, dropoff: dropoff});
     };
 
     this.rateFlight = function(flight, isPilot, rating) {
