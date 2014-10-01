@@ -2,6 +2,10 @@
 
 var React = require("react");
 
+// How Reddit ranking algorithms work
+// http://amix.dk/blog/post/19588
+// How Not To Sort By Average Rating
+// http://www.evanmiller.org/how-not-to-sort-by-average-rating.html
 var wilson = require('wilson-score');
 
 var Z_SCORE = 1.0; // 1.0 = 85%, 1.644853 = 95%, 2.3 = 99%
