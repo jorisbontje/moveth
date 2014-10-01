@@ -5,6 +5,8 @@ var React = require("react");
 var geolib = require("geolib");
 var _ = require("lodash");
 
+var Rating = require("./Rating");
+
 var MAX_LAST_SEEN = 600000;
 
 var PilotItem = React.createClass({
@@ -16,6 +18,8 @@ var PilotItem = React.createClass({
         return (
             <li>
                 id={this.props.pilot.id} distance={this.props.pilot.distance} lastSeen={this.props.pilot.lastSeen} age={this.props.pilot.age}
+                {' '}
+                <Rating rating={this.props.pilot.rating} />
                 <button type="button" className="btn btn-success" onClick={this.onPing}>Ping</button>
             </li>
         );

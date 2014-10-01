@@ -28,7 +28,7 @@ var Receipt = React.createClass({
             return null;
         }
         var isPilot = this.isPilot();
-        var showRating = (isPilot && !this.state.flight.rating.pilot) || (!isPilot && !this.state.flight.rating.client);
+        var showRating = !this.state.flight.rating || (isPilot && !this.state.flight.rating.pilot) || (!isPilot && !this.state.flight.rating.client);
         return (
             <div className="client">
                 <div className="row">
@@ -77,12 +77,12 @@ var Receipt = React.createClass({
     },
 
     onRatePositive: function() {
-        this.context.client.rateFlight(this.state.flightId, this.isPilot(), 1);
+        this.context.client.rateFlight(this.state.flight, this.isPilot(), 1);
         this.onToMain();
     },
 
     onRateNegative: function() {
-        this.context.client.rateFlight(this.state.flightId, this.isPilot(), -1);
+        this.context.client.rateFlight(this.state.flight, this.isPilot(), -1);
         this.onToMain();
     },
 

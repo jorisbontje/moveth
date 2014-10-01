@@ -49,12 +49,21 @@ var FirebaseClient = function(firebaseRef) {
         _firebaseRef.child('flight').child(flightId).update({completed: true});
     };
 
-    this.rateFlight = function(flightId, isPilot, rating) {
-        var ref = _firebaseRef.child('flight').child(flightId).child('rating');
+    this.rateFlight = function(flight, isPilot, rating) {
+        var ref = _firebaseRef.child('flight').child(flight.id).child('rating');
         if (isPilot) {
             ref.update({pilot: rating});
         } else {
             ref.update({client: rating});
+            if (rating > 0) {
+                _firebaseRef.child('pilot').child(flight.pilotId).child('rating/pos').transaction(function(currentRating) {
+                    return currentRating+1;
+                });
+            } else {
+                _firebaseRef.child('pilot').child(flight.pilotId).child('rating/neg').transaction(function(currentRating) {
+                    return currentRating+1;
+                });
+            }
         }
     };
 
