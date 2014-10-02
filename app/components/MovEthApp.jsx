@@ -2,6 +2,8 @@
 
 var React = require("react");
 
+var UserProfile = require("./UserProfile");
+
 var MovEthApp = React.createClass({
 
     childContextTypes: {
@@ -17,6 +19,7 @@ var MovEthApp = React.createClass({
     render: function() {
         return (
             <div>
+                <UserProfile />
                 <this.props.activeRouteHandler />
             </div>
         );

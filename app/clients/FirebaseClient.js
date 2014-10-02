@@ -107,6 +107,25 @@ var FirebaseClient = function(firebaseRef) {
         _firebaseRef.child('flight').child(flightId).off('value');
     };
 
+    this.listenUserProfile = function(callback) {
+        var uid = this.UID();
+        _firebaseRef.child('user').child(uid).on('value', function(data) {
+            var user = data.val() || {};
+            user.id = uid;
+            callback(user);
+        });
+    };
+
+    this.unlistenUserProfile = function() {
+        var uid = this.UID();
+        _firebaseRef.child('user').child(uid).off('value');
+    };
+
+    this.setUserName = function(name) {
+        var uid = this.UID();
+        _firebaseRef.child('user').child(uid).update({name: name});
+    };
+
     this.UID = function() {
         /* global localStorage */
         var uidKey = 'moveth:uid';

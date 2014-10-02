@@ -5,6 +5,8 @@ var Router = require("react-router");
 
 var geolib = require("geolib");
 var moment = require("moment");
+
+var constants = require("../constants");
 var FlightInfoMixin = require("./FlightInfoMixin");
 
 var BASE_FARE = 2.50;
@@ -23,7 +25,7 @@ var ReceiptDetails = React.createClass({
             <div>
                 <div className="row">
                     <div className="col-xs-12">
-                        USD {price.toFixed(2)}
+                        {constants.CURRENCY} {price.toFixed(2)}
                     </div>
                 </div>
                 <div className="row">
