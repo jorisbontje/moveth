@@ -3,8 +3,52 @@
 var React = require("react");
 var Router = require("react-router");
 
-var FlightInfo = require("./FlightInfo");
+var geolib = require("geolib");
+var moment = require("moment");
 var FlightInfoMixin = require("./FlightInfoMixin");
+
+var BASE_FARE = 2.50;
+var MINUTE_FARE = 0.20;
+var KM_FARE = 1.10;
+
+
+var ReceiptDetails = React.createClass({
+
+    render: function() {
+        var duration = moment(this.props.flight.dropoff.timestamp).diff(this.props.flight.pickup.timestamp, 'minutes');
+        var distance = geolib.getDistance(this.props.flight.pickup, this.props.flight.dropoff) / 1000;
+        var price = BASE_FARE + duration *  MINUTE_FARE + distance * KM_FARE;
+
+        return (
+            <div>
+                <div className="row">
+                    <div className="col-xs-12">
+                        USD {price.toFixed(2)}
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-xs-12">
+                        <h2>Flight Summary</h2>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-xs-4">
+                        <i className="fa fa-user fa-4x"></i>
+                        <p>Bob</p>
+                    </div>
+                    <div className="col-xs-4">
+                        <i className="fa fa-clock-o fa-4x"></i>
+                        <p>{duration} min</p>
+                    </div>
+                    <div className="col-xs-4">
+                        <i className="fa fa-globe fa-4x"></i>
+                        <p>{distance.toFixed(1)} km</p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+});
 
 var Receipt = React.createClass({
     mixins: [FlightInfoMixin],
@@ -29,6 +73,7 @@ var Receipt = React.createClass({
         }
         var isPilot = this.isPilot();
         var showRating = !this.state.flight.rating || (isPilot && !this.state.flight.rating.pilot) || (!isPilot && !this.state.flight.rating.client);
+
         return (
             <div className="client">
                 <div className="row">
@@ -41,16 +86,9 @@ var Receipt = React.createClass({
                         <button type="button" className="btn btn-default" onClick={this.onToMain}>To {isPilot ? 'Pilot' : 'Client'}</button>
                     </div>
                 </div>
-                <div className="row">
-                    <div className="col-xs-12">
-                        USD {this.state.flight.cost}
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-xs-12">
-                        <FlightInfo flight={this.state.flight} />
-                    </div>
-                </div>
+
+                <ReceiptDetails flight={this.state.flight} />
+
                 {showRating &&
                     <div>
                         <div className="row">
