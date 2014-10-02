@@ -54,21 +54,20 @@ var FirebaseClient = function(firebaseRef) {
     };
 
     this.rateFlight = function(flight, isPilot, rating) {
-        var ref = _firebaseRef.child('flight').child(flight.id).child('rating');
+        var flightRef = _firebaseRef.child('flight').child(flight.id).child('rating');
+        var userRef = null;
+
         if (isPilot) {
-            ref.update({pilot: rating});
+            flightRef.update({pilot: rating});
+            userRef = _firebaseRef.child('user').child(flight.clientId);
         } else {
-            ref.update({client: rating});
-            if (rating > 0) {
-                _firebaseRef.child('pilot').child(flight.pilotId).child('rating/pos').transaction(function(currentRating) {
-                    return currentRating+1;
-                });
-            } else {
-                _firebaseRef.child('pilot').child(flight.pilotId).child('rating/neg').transaction(function(currentRating) {
-                    return currentRating+1;
-                });
-            }
+            flightRef.update({client: rating});
+            userRef = _firebaseRef.child('pilot').child(flight.pilotId);
         }
+
+        userRef.child('rating/' + (rating > 0 ? 'pos' : 'neg')).transaction(function(currentRating) {
+            return currentRating+1;
+        });
     };
 
     this.pingPilot = function(pilotId, flightId) {
