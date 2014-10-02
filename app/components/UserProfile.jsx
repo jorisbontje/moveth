@@ -1,6 +1,9 @@
 /** @jsx React.DOM */
 
 var React = require("react");
+var OverlayTrigger = require('react-bootstrap/OverlayTrigger');
+var Tooltip = require('react-bootstrap/Tooltip');
+var Button = require('react-bootstrap/Button');
 
 var CreateAccountModal = require("./CreateAccountModal");
 
@@ -28,7 +31,9 @@ var UserProfile = React.createClass({
 
         return (
             <div>
-                <i className="fa fa-user"></i> {this.state.user.name}
+                <OverlayTrigger placement="bottom" overlay={<Tooltip>ID: {this.state.user.id.substr(0, 8) + '\u2026 '}</Tooltip>}>
+                    <Button bsStyle="default"><i className="fa fa-user"></i> {this.state.user.name}</Button>
+                </OverlayTrigger>
             </div>
         );
     },

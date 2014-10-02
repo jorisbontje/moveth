@@ -50,7 +50,6 @@ var Pilot = React.createClass({
                             <button type="button" className="btn btn-info" onClick={this.onGoOnlineButton}>Go Online</button>
                         }
                         <hr />
-                        <p>UID: {this.context.client.UID()}</p>
                         <p>Lat: {this.state.latitude} Long: {this.state.longitude}</p>
                         <FlightInfo flight={this.state.flight} isPilot={true} onAccept={this.onAcceptButton} onReject={this.onRejectButton} onComplete={this.onCompleteButton} />
                     </div>
