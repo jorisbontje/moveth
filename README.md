@@ -27,3 +27,7 @@ Starts a watch loop and run `jsxhint`, `jest` and `webpack` when a file is modif
 ```
 $ firebase deploy
 ```
+
+# License
+
+Modified MIT License - (c) 2014 - Joris Bontje. See [License](LICENSE.md) file.
