@@ -6,6 +6,7 @@ var Tooltip = require('react-bootstrap/Tooltip');
 var Button = require('react-bootstrap/Button');
 
 var CreateAccountModal = require("./CreateAccountModal");
+var Rating = require("./Rating");
 
 var UserProfile = React.createClass({
     contextTypes: {
@@ -31,7 +32,7 @@ var UserProfile = React.createClass({
 
         return (
             <div>
-                <OverlayTrigger placement="bottom" overlay={<Tooltip>ID: {this.state.user.id.substr(0, 8) + '\u2026 '}</Tooltip>}>
+                <OverlayTrigger placement="bottom" overlay={<Tooltip><Rating rating={this.state.user} /></Tooltip>}>
                     <Button bsStyle="default"><i className="fa fa-user"></i> {this.state.user.name}</Button>
                 </OverlayTrigger>
             </div>

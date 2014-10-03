@@ -2,6 +2,8 @@
 
 var React = require("react");
 
+var _ = require("lodash");
+
 // How Reddit ranking algorithms work
 // http://amix.dk/blog/post/19588
 // How Not To Sort By Average Rating
@@ -15,7 +17,10 @@ var Rating = React.createClass({
         var score = wilson(this.props.rating.pos, this.props.rating.neg + this.props.rating.pos, Z_SCORE);
         return (
             <div>
-                <strong>Rating={score * 100}</strong> (pos={this.props.rating.pos} neg={this.props.rating.neg})
+                { _.isNaN(score) ? 'No Rating'
+                    :
+                <span><strong>Rating={score * 100}</strong> (pos={this.props.rating.pos} neg={this.props.rating.neg})</span>
+                }
             </div>
         );
     }
