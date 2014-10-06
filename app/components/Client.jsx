@@ -38,7 +38,7 @@ var Client = React.createClass({
                     <div className="col-xs-12">
                         <PilotFinder latitude={this.state.latitude} longitude={this.state.longitude} showSummary={true} />
                         {this.state.confirmation ?
-                            <div>
+                            <div className="btn-toolbar" role="toolbar">
                                 <button type="button" className="btn btn-success" onClick={this.onConfirm}>Confirm Airlift</button>
                                 <button type="button" className="btn btn-default" onClick={this.onCancel}>Cancel</button>
                             </div>

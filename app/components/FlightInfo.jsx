@@ -21,7 +21,7 @@ var FlightInfo = React.createClass({
                     <li>Pilot={this.props.flight.pilotId}</li>
                 </ul>
                 {this.props.isPilot && !this.props.flight.pilotId &&
-                    <div>
+                    <div className="btn-toolbar">
                         <button type="button" className="btn btn-success" onClick={this.props.onAccept}>Accept</button>
                         <button type="button" className="btn btn-danger" onClick={this.props.onReject}>Reject</button>
                     </div>

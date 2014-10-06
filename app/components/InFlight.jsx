@@ -33,10 +33,12 @@ var InFlight = React.createClass({
                 <div className="row">
                     <div className="col-xs-12">
                         <p>Pick up time is approximately X min.</p>
-                        {!searching &&
-                            <button type="button" className="btn btn-success" onClick={this.onCall}>Call Pilot</button>
-                        }
-                        <button type="button" className="btn btn-danger" onClick={this.onCancel}>Cancel</button>
+                        <div className="btn-toolbar">
+                            {!searching &&
+                                <button type="button" className="btn btn-success" onClick={this.onCall}>Call Pilot</button>
+                            }
+                            <button type="button" className="btn btn-danger" onClick={this.onCancel}>Cancel</button>
+                        </div>
                         <hr />
                         <FlightInfo flight={this.state.flight} />
                         {searching &&
