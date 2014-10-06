@@ -14,6 +14,11 @@ var Z_SCORE = 1.0; // 1.0 = 85%, 1.644853 = 95%, 2.3 = 99%
 
 var Rating = React.createClass({
     render: function() {
+        if (!this.props.rating) {
+            return (
+                <div>No Rating</div>
+            );
+        }
         var score = wilson(this.props.rating.pos, this.props.rating.neg + this.props.rating.pos, Z_SCORE);
         return (
             <div>
