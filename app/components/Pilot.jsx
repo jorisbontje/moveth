@@ -42,13 +42,15 @@ var Pilot = React.createClass({
                     </div>
                 </div>
                 <GMap latitude={this.state.latitude} longitude={this.state.longitude} watch={true} onLocationChange={this.onLocationChange} />
-                <div className="row">
+                <div className="row spacer">
                     <div className="col-xs-12">
+                        <div className="btn-toolbar">
                         {this.state.online ?
                             <button type="button" className="btn btn-info" onClick={this.onGoOfflineButton}>Go Offline</button>
                         :
                             <button type="button" className="btn btn-info" onClick={this.onGoOnlineButton}>Go Online</button>
                         }
+                        </div>
                         <hr />
                         <p>Lat: {this.state.latitude} Long: {this.state.longitude}</p>
                         <FlightInfo flight={this.state.flight} isPilot={true} onAccept={this.onAcceptButton} onReject={this.onRejectButton} onComplete={this.onCompleteButton} />
