@@ -1,13 +1,11 @@
 /** @jsx React.DOM */
 
 var React = require("react");
-
-var geolib = require("geolib");
-var _ = require("lodash");
+var Fluxxor = require("fluxxor");
+var FluxChildMixin = Fluxxor.FluxChildMixin(React);
+var StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 var Rating = require("./Rating");
-
-var MAX_LAST_SEEN = 600000;
 
 var PilotItem = React.createClass({
     contextTypes: {
@@ -48,64 +46,45 @@ var PilotsList = React.createClass({
 });
 
 var PilotFinder = React.createClass({
-    contextTypes: {
-        client: React.PropTypes.object
-    },
+    mixins: [FluxChildMixin, StoreWatchMixin("RadarStore")],
 
     propTypes: {
-        flightId: React.PropTypes.string,
-        latitude: React.PropTypes.number.isRequired,
-        longitude: React.PropTypes.number.isRequired
+        flightId: React.PropTypes.string
     },
 
-    getInitialState: function() {
+    getStateFromFlux: function() {
+        var flux = this.getFlux();
         return {
-            activePilots: []
+            radar: flux.store("RadarStore").getState()
         };
     },
 
     render: function() {
+        var count = this.state.radar.activePilotsCount;
         return (
             <div>
-                <p>We have {_.size(this.state.activePilots)} pilots in your area.</p>
+                <p>We have {count} {count == 1 ? 'pilot' : 'pilots'} in your area.</p>
                 {!this.props.showSummary &&
-                    <PilotsList pilots={this.state.activePilots} flightId={this.props.flightId} />
+                    <PilotsList pilots={this.state.radar.activePilots} flightId={this.props.flightId} />
                 }
             </div>
         );
     },
 
-    onPilotsUpdate: function(pilots) {
-        if (this.isMounted()) {
-            var clientPos = {latitude: this.props.latitude,
-                             longitude: this.props.longitude};
-            var now = Date.now();
-
-            var activePilots = _.chain(pilots)
-                           .mapValues(function(val, key) {
-                                val.id = key;
-                                val.age = now - val.lastSeen;
-                                if (_.has(val, 'latitude') && _.has(val, 'longitude')) {
-                                    val.distance = geolib.getDistance(clientPos, val);
-                                }
-                                return val;
-                            })
-                           .filter(function(pilot) {
-                               return pilot.online && now - pilot.lastSeen < MAX_LAST_SEEN && _.has(pilot, 'distance');
-                           })
-                           .sortBy('distance')
-                           .value();
-
-            this.setState({activePilots: activePilots});
+    componentWillReceiveProps: function(nextProps) {
+        // TODO move to Map action
+        if (this.props.latitude != nextProps.latitude || this.props.longitude != nextProps.longitude) {
+            this.getFlux().actions.radar.updatePosition(nextProps.latitude, nextProps.longitude);
         }
     },
 
     componentDidMount: function() {
-        this.context.client.listenPilots(this.onPilotsUpdate);
+        this.getFlux().actions.radar.registerRadar(this.props.latitude, this.props.longitude);
+        // TODO register start position?
     },
 
     componentWillUnmount: function() {
-        this.context.client.unlistenPilots();
+        this.getFlux().actions.radar.unRegisterRadar();
     },
 });
 

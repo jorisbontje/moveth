@@ -25,6 +25,8 @@ var Route = Router.Route;
 var Routes = Router.Routes;
 var Redirect = Router.Redirect;
 
+var RadarStore = require("./stores/RadarStore");
+var RadarActions = require("./actions/RadarActions");
 var UserStore = require("./stores/UserStore");
 var UserActions = require("./actions/UserActions");
 
@@ -36,10 +38,12 @@ var firebaseRef = new Firebase(firebaseUrl);
 var client = new FirebaseClient(firebaseRef);
 
 var stores = {
+    RadarStore: new RadarStore(),
     UserStore: new UserStore()
 };
 
 var actions = {
+    radar: new RadarActions(client),
     user: new UserActions(client)
 };
 
