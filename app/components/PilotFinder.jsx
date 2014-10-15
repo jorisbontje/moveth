@@ -15,7 +15,7 @@ var PilotItem = React.createClass({
     render: function() {
         return (
             <li>
-                id={this.props.pilot.id} distance={this.props.pilot.distance} lastSeen={this.props.pilot.lastSeen} age={this.props.pilot.age}
+                name={this.props.pilot.name} id={this.props.pilot.id} distance={this.props.pilot.distance} lastSeen={this.props.pilot.lastSeen} age={this.props.pilot.age}
                 {' '}
                 <Rating rating={this.props.pilot.rating} />
                 <button type="button" className="btn btn-success" onClick={this.onPing}>Ping</button>
