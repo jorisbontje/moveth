@@ -4,9 +4,9 @@ var utils = require("../utils");
 
 var FirebaseClient = function(firebaseRef) {
 
-    this.trackPilotLocation = function(latitude, longitude, lastSeen) {
+    this.trackPilotLocation = function(user, latitude, longitude, lastSeen) {
         var uid = this.UID();
-        _firebaseRef.child('pilot').child(uid).update({latitude: latitude, longitude: longitude, lastSeen: lastSeen, online: true});
+        _firebaseRef.child('pilot').child(uid).update({name: user.name, rating: user.rating || {}, latitude: latitude, longitude: longitude, lastSeen: lastSeen, online: true});
         _firebaseRef.child('pilot').child(uid).setPriority(lastSeen);
     };
 
@@ -86,7 +86,7 @@ var FirebaseClient = function(firebaseRef) {
             userRef = _firebaseRef.child('user').child(flight.clientId);
         } else {
             flightRef.update({client: rating});
-            userRef = _firebaseRef.child('pilot').child(flight.pilotId);
+            userRef = _firebaseRef.child('user').child(flight.pilotId);
         }
 
         userRef.child('rating/' + (rating > 0 ? 'pos' : 'neg')).transaction(function(currentRating) {

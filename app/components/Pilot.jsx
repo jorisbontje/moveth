@@ -121,7 +121,7 @@ var Pilot = React.createClass({
     trackLocation: function(force) {
         if (force || this.state.online) {
             console.log("updating tracking location");
-            this.context.client.trackPilotLocation(this.state.latitude, this.state.longitude, Date.now());
+            this.context.client.trackPilotLocation(this.props.user, this.state.latitude, this.state.longitude, Date.now());
         }
     }
 });

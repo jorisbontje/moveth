@@ -31,7 +31,7 @@ var MovEthApp = React.createClass({
         return (
             <div>
                 <UserProfile user={this.state.user.currentUser} />
-                <this.props.activeRouteHandler />
+                <this.props.activeRouteHandler user={this.state.user.currentUser} />
             </div>
         );
     },
