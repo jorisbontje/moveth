@@ -1,10 +1,14 @@
 /** @jsx React.DOM */
 
 var React = require("react");
+var Fluxxor = require("fluxxor");
+var FluxMixin = Fluxxor.FluxMixin(React);
+var StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 var UserProfile = require("./UserProfile");
 
 var MovEthApp = React.createClass({
+    mixins: [FluxMixin, StoreWatchMixin("UserStore")],
 
     childContextTypes: {
         client: React.PropTypes.object
@@ -16,17 +20,28 @@ var MovEthApp = React.createClass({
         };
     },
 
+    getStateFromFlux: function() {
+        var flux = this.getFlux();
+        return {
+            user: flux.store("UserStore").getState()
+        };
+    },
+
     render: function() {
         return (
             <div>
-                <UserProfile />
-                <this.props.activeRouteHandler />
+                <UserProfile user={this.state.user.currentUser} />
+                <this.props.activeRouteHandler flux={this.props.flux} />
             </div>
         );
     },
 
     componentDidMount: function() {
-        // TODO load / init
+        this.getFlux().actions.user.loadCurrentUser(this.props.client.UID());
+    },
+
+    componentWillUnmount: function() {
+        this.getFlux().actions.user.unloadCurrentUser();
     },
 });
 

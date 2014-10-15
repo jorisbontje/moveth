@@ -106,8 +106,7 @@ var FirebaseClient = function(firebaseRef) {
         _firebaseRef.child('flight').child(flightId).off('value');
     };
 
-    this.listenUserProfile = function(callback) {
-        var uid = this.UID();
+    this.listenUserProfile = function(uid, callback) {
         _firebaseRef.child('user').child(uid).on('value', function(data) {
             var user = data.val() || {};
             user.id = uid;
@@ -115,8 +114,7 @@ var FirebaseClient = function(firebaseRef) {
         });
     };
 
-    this.unlistenUserProfile = function() {
-        var uid = this.UID();
+    this.unlistenUserProfile = function(uid) {
         _firebaseRef.child('user').child(uid).off('value');
     };
 

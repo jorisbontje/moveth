@@ -1,6 +1,9 @@
 /** @jsx React.DOM */
 
 var React = require("react");
+var Fluxxor = require("fluxxor");
+var FluxChildMixin = Fluxxor.FluxChildMixin(React);
+
 var OverlayTrigger = require('react-bootstrap/OverlayTrigger');
 var Tooltip = require('react-bootstrap/Tooltip');
 var Button = require('react-bootstrap/Button');
@@ -9,22 +12,14 @@ var CreateAccountModal = require("./CreateAccountModal");
 var Rating = require("./Rating");
 
 var UserProfile = React.createClass({
-    contextTypes: {
-        client: React.PropTypes.object
-    },
-
-    getInitialState: function() {
-        return {
-            user: null
-        };
-    },
+    mixins: [FluxChildMixin],
 
     render: function() {
-        if (!this.state.user) {
+        if (!this.props.user) {
             return null;
         }
 
-        if (!this.state.user.name) {
+        if (!this.props.user.name) {
             return (
                 <CreateAccountModal />
             );
@@ -32,23 +27,11 @@ var UserProfile = React.createClass({
 
         return (
             <div>
-                <OverlayTrigger placement="bottom" overlay={<Tooltip><Rating rating={this.state.user} /></Tooltip>}>
-                    <Button bsStyle="default"><i className="fa fa-user"></i> {this.state.user.name}</Button>
+                <OverlayTrigger placement="bottom" overlay={<Tooltip><Rating rating={this.props.user} /></Tooltip>}>
+                    <Button bsStyle="default"><i className="fa fa-user"></i> {this.props.user.name}</Button>
                 </OverlayTrigger>
             </div>
         );
-    },
-
-    componentDidMount: function() {
-        this.context.client.listenUserProfile(this.onUserProfile);
-    },
-
-    componentWillUnmount: function() {
-        this.context.client.unlistenUserProfile();
-    },
-
-    onUserProfile: function(user) {
-        this.setState({user: user});
     }
 });
 

@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 
 var React = require("react");
+var Fluxxor = require("fluxxor");
 var Router = require("react-router");
 
 /* global window */
@@ -18,11 +19,14 @@ var Receipt = require("./components/Receipt");
 var jQuery = require("jquery");
 window.jQuery = jQuery;
 require("bootstrap/dist/js/bootstrap.js");
-//require("./css/style.css");
+require("./css/style.css");
 
 var Route = Router.Route;
 var Routes = Router.Routes;
 var Redirect = Router.Redirect;
+
+var UserStore = require("./stores/UserStore");
+var UserActions = require("./actions/UserActions");
 
 var Firebase = require("Firebase");
 var FirebaseClient = require("./clients/FirebaseClient");
@@ -31,9 +35,19 @@ var firebaseUrl = "https://moveth.firebaseio.com/";
 var firebaseRef = new Firebase(firebaseUrl);
 var client = new FirebaseClient(firebaseRef);
 
+var stores = {
+    UserStore: new UserStore()
+};
+
+var actions = {
+    user: new UserActions(client)
+};
+
+var flux = new Fluxxor.Flux(stores, actions);
+
 var routes = (
     <Routes>
-        <Route handler={MovEthApp} client={client}>
+        <Route handler={MovEthApp} client={client} flux={flux}>
             <Redirect from="/" to="client" />
             <Route name="client" path="/client" handler={Client} />
             <Route name="inFlight" path="/flight/:flightId/:latitude,:longitude/:address" handler={InFlight} />
