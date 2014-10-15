@@ -22,7 +22,7 @@ var Rating = React.createClass({
         var score = wilson(this.props.rating.pos, this.props.rating.neg + this.props.rating.pos, Z_SCORE);
         return (
             <div>
-                { _.isNaN(score) ? 'No Rating'
+                { _.isNaN(score) ? 'Insufficient Data'
                     :
                 <span><strong>Rating={score * 100}</strong> (pos={this.props.rating.pos} neg={this.props.rating.neg})</span>
                 }
