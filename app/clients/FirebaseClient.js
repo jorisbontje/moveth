@@ -34,7 +34,18 @@ var FirebaseClient = function(firebaseRef) {
         var uid = this.UID();
         var now = Date.now();
         var pickup = {latitude: latitude, longitude: longitude, timestamp: now};
-        _firebaseRef.child('flight').child(flightId).set({flightId: flightId, pickup: pickup, clientId: uid});
+        _firebaseRef.child('flight').child(flightId).setWithPriority({flightId: flightId, pickup: pickup, clientId: uid}, now);
+    };
+
+    /**
+     * Removes 2-day old flights based on the set priority
+     */
+    this.removeOldFlights = function() {
+        var timestamp = new Date();
+        timestamp.setDate(timestamp.getDate() - 2);
+        _firebaseRef.child('flight').endAt(timestamp.getTime()).on("child_added", function(snap) {
+            snap.ref().remove();
+        });
     };
 
     this.acceptFlight = function(flightId) {
