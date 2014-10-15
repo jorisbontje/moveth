@@ -7,16 +7,29 @@ var FirebaseClient = function(firebaseRef) {
     this.trackPilotLocation = function(latitude, longitude, lastSeen) {
         var uid = this.UID();
         _firebaseRef.child('pilot').child(uid).update({latitude: latitude, longitude: longitude, lastSeen: lastSeen, online: true});
+        _firebaseRef.child('pilot').child(uid).setPriority(lastSeen);
     };
 
     this.pilotOffline = function(lastSeen) {
         var uid = this.UID();
         _firebaseRef.child('pilot').child(uid).update({lastSeen: lastSeen, online: false});
+        _firebaseRef.child('pilot').child(uid).setPriority(lastSeen);
     };
 
     this.registerPilotDisconnect = function() {
         var uid = this.UID();
         _firebaseRef.child('pilot').child(uid).onDisconnect().update({online: false});
+    };
+
+    /**
+     * Removes 2-day old pilots based on the set priority
+     */
+    this.removeOldPilots = function() {
+        var timestamp = new Date();
+        timestamp.setDate(timestamp.getDate() - 2);
+        _firebaseRef.child('pilot').endAt(timestamp.getTime()).on("child_added", function(snap) {
+            snap.ref().remove();
+        });
     };
 
     this.listenPilots = function(callback) {
