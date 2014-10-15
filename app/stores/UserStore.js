@@ -6,7 +6,6 @@ var UserStore = Fluxxor.createStore({
 
     initialize: function(options) {
         this.currentUserId = null;
-        this.currentUser = null;
         this.users = options.users || {};
         this.loading = false;
         this.error = null;
@@ -23,8 +22,7 @@ var UserStore = Fluxxor.createStore({
 
     onLoadCurrentUser: function(payload) {
         this.currentUserId = payload.uid;
-        this.currentUser = null;
-        this.users[payload.uid] = {};
+        this.users[payload.uid] = {loading: true};
         this.loading = true;
         this.error = null;
         this.emit(constants.CHANGE_EVENT);
@@ -32,16 +30,13 @@ var UserStore = Fluxxor.createStore({
 
     onLoadUser: function(payload) {
         console.log("onLoadUser", payload);
-        this.users[payload.uid] = {};
+        this.users[payload.uid] = {loading: true};
         this.loading = true;
         this.error = null;
         this.emit(constants.CHANGE_EVENT);
     },
 
     onLoadUserSuccess: function(payload) {
-        if (payload.user.id == this.currentUserId) {
-            this.currentUser = payload.user;
-        }
         this.users[payload.user.id] = payload.user;
         this.loading = false;
         this.error = null;
@@ -51,7 +46,6 @@ var UserStore = Fluxxor.createStore({
     onUnLoadUser: function(payload) {
         if (payload.uid == this.currentUserId) {
             this.currentUserId = null;
-            this.currentUser = null;
         }
         delete this.users[payload.uid];
         this.loading = false;
@@ -61,7 +55,7 @@ var UserStore = Fluxxor.createStore({
 
     getState: function() {
         return {
-            currentUser: this.currentUser,
+            currentUser: this.users[this.currentUserId],
             currentUserId: this.currentUserId,
             users: this.users,
             loading: this.loading,

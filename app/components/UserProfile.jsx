@@ -19,7 +19,7 @@ var UserProfile = React.createClass({
             return null;
         }
 
-        if (!this.props.user.name) {
+        if (!this.props.user.name && !this.props.user.loading) {
             return (
                 <CreateAccountModal />
             );
