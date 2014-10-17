@@ -20,7 +20,7 @@ var InFlight = React.createClass({
     render: function() {
         var latitude = parseFloat(this.props.params.latitude);
         var longitude = parseFloat(this.props.params.longitude);
-        var searching = this.state.flight && !this.state.flight.pilotId;
+        var searching = this.state.flight && !this.state.flight.pilot;
 
         return (
             <div className="client">

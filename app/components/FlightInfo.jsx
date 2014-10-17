@@ -23,15 +23,19 @@ var FlightInfo = React.createClass({
                     {' '}
                     <Rating rating={this.props.flight.client.rating} />
                     </li>
-                    <li>Pilot={this.props.flight.pilotId}</li>
+                    {this.props.flight.pilot &&
+                        <li>Pilot={this.props.flight.pilot.id} name={this.props.flight.pilot.name}
+                        {' '}
+                        <Rating rating={this.props.flight.pilot.rating} /></li>
+                    }
                 </ul>
-                {this.props.isPilot && !this.props.flight.pilotId &&
+                {this.props.isPilot && !this.props.flight.pilot &&
                     <div className="btn-toolbar">
                         <button type="button" className="btn btn-success" onClick={this.props.onAccept}>Accept</button>
                         <button type="button" className="btn btn-danger" onClick={this.props.onReject}>Reject</button>
                     </div>
                 }
-                {this.props.isPilot && this.props.flight.pilotId &&
+                {this.props.isPilot && this.props.flight.pilot &&
                     <div>
                         <button type="button" className="btn btn-info" onClick={this.props.onComplete}>Complete</button>
                     </div>

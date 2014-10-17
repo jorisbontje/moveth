@@ -35,8 +35,11 @@ var ReceiptDetails = React.createClass({
                 </div>
                 <div className="row">
                     <div className="col-xs-4">
-                        <i className="fa fa-user fa-4x"></i>
-                        <p>Bob</p>
+                        <i className="fa fa-users fa-4x"></i>
+                        <ul>
+                            <li>Pilot: {this.props.flight.pilot.name}</li>
+                            <li>Client: {this.props.flight.client.name}</li>
+                        </ul>
                     </div>
                     <div className="col-xs-4">
                         <i className="fa fa-clock-o fa-4x"></i>

@@ -61,9 +61,9 @@ var FirebaseClient = function(firebaseRef) {
         });
     };
 
-    this.acceptFlight = function(flightId) {
+    this.acceptFlight = function(flightId, user) {
         var uid = this.UID();
-        _firebaseRef.child('flight').child(flightId).update({pilotId: uid});
+        _firebaseRef.child('flight').child(flightId).update({pilot: {id: uid, name: user.name, rating: user.rating || {}}});
     };
 
     this.rejectFlight = function(flightId) {

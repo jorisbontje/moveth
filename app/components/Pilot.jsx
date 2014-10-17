@@ -92,7 +92,7 @@ var Pilot = React.createClass({
     },
 
     onAcceptButton: function() {
-        this.context.client.acceptFlight(this.state.flightId);
+        this.context.client.acceptFlight(this.state.flightId, this.props.user);
     },
 
     onRejectButton: function() {
