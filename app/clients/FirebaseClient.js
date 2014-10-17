@@ -43,11 +43,11 @@ var FirebaseClient = function(firebaseRef) {
         _firebaseRef.child('pilot').off('value');
     };
 
-    this.registerFlight = function(flightId, latitude, longitude) {
+    this.registerFlight = function(flightId, latitude, longitude, user) {
         var uid = this.UID();
         var now = Date.now();
         var pickup = {latitude: latitude, longitude: longitude, timestamp: now};
-        _firebaseRef.child('flight').child(flightId).setWithPriority({flightId: flightId, pickup: pickup, clientId: uid}, now);
+        _firebaseRef.child('flight').child(flightId).setWithPriority({flightId: flightId, pickup: pickup, client: {id: uid, name: user.name}}, now);
     };
 
     /**

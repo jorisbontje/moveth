@@ -79,7 +79,7 @@ var Client = React.createClass({
     onConfirm: function() {
         console.log("confirmed");
         var flightId = utils.randomId();
-        this.context.client.registerFlight(flightId, this.state.latitude, this.state.longitude);
+        this.context.client.registerFlight(flightId, this.state.latitude, this.state.longitude, this.props.user);
         Router.transitionTo('inFlight', {latitude: this.state.latitude, longitude: this.state.longitude, address: this.state.address, flightId: flightId});
     },
 
