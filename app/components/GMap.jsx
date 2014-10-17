@@ -7,6 +7,8 @@ var React = require('react');
 // http://snazzymaps.com/style/18/retro
 var GMAP_STYLE = [{"featureType":"administrative","stylers":[{"visibility":"off"}]},{"featureType":"poi","stylers":[{"visibility":"simplified"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"simplified"}]},{"featureType":"water","stylers":[{"visibility":"simplified"}]},{"featureType":"transit","stylers":[{"visibility":"simplified"}]},{"featureType":"landscape","stylers":[{"visibility":"simplified"}]},{"featureType":"road.highway","stylers":[{"visibility":"off"}]},{"featureType":"road.local","stylers":[{"visibility":"on"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"visibility":"on"}]},{"featureType":"water","stylers":[{"color":"#84afa3"},{"lightness":52}]},{"stylers":[{"saturation":-17},{"gamma":0.36}]},{"featureType":"transit.line","elementType":"geometry","stylers":[{"color":"#3f518c"}]}];
 
+var ICON_BASE = "https://maps.google.com/mapfiles/kml/";
+
 /* global google */
 var GMap = React.createClass({
 
@@ -15,7 +17,8 @@ var GMap = React.createClass({
         return {
             geocoder: null,
             map: null,
-            marker: null,
+            center: null,
+            markers: [],
             watch: null
         };
     },
@@ -28,6 +31,7 @@ var GMap = React.createClass({
             address: '',
             zoom: 15,
             height: "40vw",
+            points: [],
             gmaps_api_key: '',
             showAddress: false,
             watch: false
@@ -38,11 +42,11 @@ var GMap = React.createClass({
         var map = this.state.map;
         if (map === null) return false;
 
-        var marker = this.state.marker;
+        var center = this.state.center;
 
         var latlng = new google.maps.LatLng(latitude, longitude);
         map.setCenter(latlng);
-        marker.setPosition(latlng);
+        center.setPosition(latlng);
 
         if (this.props.onAddressChange && (this.props.latitude != latitude || this.props.longitude != longitude)) {
             var geocoder = this.state.geocoder;
@@ -60,6 +64,37 @@ var GMap = React.createClass({
                 }
             }.bind(this));
         }
+    },
+
+    updateMarkers: function(points) {
+        var markers = this.state.markers;
+        var map = this.state.map;
+
+        // remove everything
+        markers.forEach(function(marker) {
+            marker.setMap(null);
+        });
+
+        this.state.markers = [];
+
+        // add new markers
+        points.forEach((function(point) {
+            var latLng = new google.maps.LatLng(point.latitude, point.longitude);
+
+            var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: point.name,
+                icon: ICON_BASE + 'shapes/heliport.png',
+                scale: 20,
+                zIndex: 0
+            });
+
+            markers.push(marker);
+
+        }));
+
+        this.setState({markers: markers});
     },
 
     render: function() {
@@ -106,7 +141,8 @@ var GMap = React.createClass({
 
             var geocoder = new google.maps.Geocoder();
 
-            this.setState({map: map, marker: marker, geocoder: geocoder});
+            this.setState({map: map, center: marker, geocoder: geocoder});
+            this.updateMarkers(this.props.points);
 
             google.maps.event.addListener(map, 'zoom_changed', function() {
                 var zoomLevel = map.getZoom();
@@ -144,6 +180,7 @@ var GMap = React.createClass({
     // update markers if needed
     componentWillReceiveProps: function(props) {
         if(props.latitude || props.longitude) this.updateCenter(props.latitude, props.longitude);
+        if(props.points) this.updateMarkers(props.points);
     },
 
     geoSuccess: function(position) {

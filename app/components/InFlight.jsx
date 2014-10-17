@@ -29,7 +29,8 @@ var InFlight = React.createClass({
                         <h1>{searching ? 'SEARCHING' : 'IN FLIGHT'}</h1>
                     </div>
                 </div>
-                <GMap latitude={latitude} longitude={longitude} address={this.props.params.address} showAddress={true} />
+                <GMap latitude={latitude} longitude={longitude} address={this.props.params.address} showAddress={true}
+                      points={this.props.radar.activePilots} />
                 <div className="row">
                     <div className="col-xs-12">
                         <p>Pick up time is approximately X min.</p>

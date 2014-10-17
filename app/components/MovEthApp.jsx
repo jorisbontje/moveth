@@ -8,7 +8,7 @@ var StoreWatchMixin = Fluxxor.StoreWatchMixin;
 var UserProfile = require("./UserProfile");
 
 var MovEthApp = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin("UserStore")],
+    mixins: [FluxMixin, StoreWatchMixin("RadarStore", "UserStore")],
 
     childContextTypes: {
         client: React.PropTypes.object
@@ -23,6 +23,7 @@ var MovEthApp = React.createClass({
     getStateFromFlux: function() {
         var flux = this.getFlux();
         return {
+            radar: flux.store("RadarStore").getState(),
             user: flux.store("UserStore").getState()
         };
     },
@@ -31,7 +32,7 @@ var MovEthApp = React.createClass({
         return (
             <div>
                 <UserProfile user={this.state.user.currentUser} />
-                <this.props.activeRouteHandler user={this.state.user.currentUser} />
+                <this.props.activeRouteHandler radar={this.state.radar} user={this.state.user.currentUser} />
             </div>
         );
     },

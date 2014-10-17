@@ -33,6 +33,7 @@ var Client = React.createClass({
                     </div>
                 </div>
                 <GMap latitude={this.state.latitude} longitude={this.state.longitude} address={this.state.address} showAddress={true} watch={true}
+                      points={this.props.radar.activePilots}
                       onLocationChange={this.onLocationChange} onAddressChange={this.onAddressChange} />
                 <div className="row">
                     <div className="col-xs-12">
