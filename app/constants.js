@@ -7,7 +7,6 @@ module.exports = {
     VALID_USERNAME_PATTERN: "[a-z0-9_.+@-]{1,32}",
     radar: keyMirror({
         REGISTER_RADAR: null,
-        UNREGISTER_RADAR: null,
         UPDATE_POSITION: null,
         UPDATE_PILOTS: null
     }),

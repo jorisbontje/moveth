@@ -15,8 +15,6 @@ var RadarActions = function(client) {
     };
 
     this.unRegisterRadar = function() {
-        this.dispatch(constants.radar.UNREGISTER_RADAR);
-
         _client.unlistenPilots();
     };
 

@@ -15,7 +15,6 @@ var RadarStore = Fluxxor.createStore({
 
         this.bindActions(
             constants.radar.REGISTER_RADAR, this.onRegisterRadar,
-            constants.radar.UNREGISTER_RADAR, this.onUnregisterRadar,
             constants.radar.UPDATE_POSITION, this.onUpdatePosition,
             constants.radar.UPDATE_PILOTS, this.onUpdatePilots
         );
@@ -26,10 +25,6 @@ var RadarStore = Fluxxor.createStore({
     // TODO remove duplicate of onUpdatePosition?
     onRegisterRadar: function(payload) {
         this.position = payload;
-        this.emit(constants.CHANGE_EVENT);
-    },
-
-    onUnregisterRadar: function() {
         this.emit(constants.CHANGE_EVENT);
     },
 
