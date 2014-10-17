@@ -7,8 +7,6 @@ var React = require('react');
 // http://snazzymaps.com/style/18/retro
 var GMAP_STYLE = [{"featureType":"administrative","stylers":[{"visibility":"off"}]},{"featureType":"poi","stylers":[{"visibility":"simplified"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"simplified"}]},{"featureType":"water","stylers":[{"visibility":"simplified"}]},{"featureType":"transit","stylers":[{"visibility":"simplified"}]},{"featureType":"landscape","stylers":[{"visibility":"simplified"}]},{"featureType":"road.highway","stylers":[{"visibility":"off"}]},{"featureType":"road.local","stylers":[{"visibility":"on"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"visibility":"on"}]},{"featureType":"water","stylers":[{"color":"#84afa3"},{"lightness":52}]},{"stylers":[{"saturation":-17},{"gamma":0.36}]},{"featureType":"transit.line","elementType":"geometry","stylers":[{"color":"#3f518c"}]}];
 
-var ICON_BASE = "https://maps.google.com/mapfiles/kml/";
-
 /* global google */
 var GMap = React.createClass({
 
@@ -34,11 +32,12 @@ var GMap = React.createClass({
             points: [],
             gmaps_api_key: '',
             showAddress: false,
+            markerOnline: true,
             watch: false
         };
     },
 
-    updateCenter: function(latitude, longitude) {
+    updateCenter: function(latitude, longitude, markerOnline) {
         var map = this.state.map;
         if (map === null) return false;
 
@@ -47,6 +46,12 @@ var GMap = React.createClass({
         var latlng = new google.maps.LatLng(latitude, longitude);
         map.setCenter(latlng);
         center.setPosition(latlng);
+
+        if (markerOnline) {
+            center.setIcon("http://maps.google.com/mapfiles/ms/icons/green-dot.png");
+        } else {
+            center.setIcon("http://maps.google.com/mapfiles/ms/icons/red-dot.png");
+        }
 
         if (this.props.onAddressChange && (this.props.latitude != latitude || this.props.longitude != longitude)) {
             var geocoder = this.state.geocoder;
@@ -85,7 +90,7 @@ var GMap = React.createClass({
                 position: latLng,
                 map: map,
                 title: point.name,
-                icon: ICON_BASE + 'shapes/heliport.png',
+                icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
                 scale: 20,
                 zIndex: 0
             });
@@ -133,10 +138,12 @@ var GMap = React.createClass({
             };
 
             var map = new google.maps.Map(this.refs.map.getDOMNode(), mapOptions);
+
             var marker = new google.maps.Marker({
                 position: center,
                 map: map,
-                title: "YOU"
+                title: "YOU",
+                icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
             });
 
             var geocoder = new google.maps.Geocoder();
@@ -179,7 +186,7 @@ var GMap = React.createClass({
 
     // update markers if needed
     componentWillReceiveProps: function(props) {
-        if(props.latitude || props.longitude) this.updateCenter(props.latitude, props.longitude);
+        if(props.latitude || props.longitude) this.updateCenter(props.latitude, props.longitude, props.markerOnline);
         if(props.points) this.updateMarkers(props.points);
     },
 
