@@ -47,7 +47,7 @@ var FirebaseClient = function(firebaseRef) {
         var uid = this.UID();
         var now = Date.now();
         var pickup = {latitude: latitude, longitude: longitude, timestamp: now};
-        _firebaseRef.child('flight').child(flightId).setWithPriority({flightId: flightId, pickup: pickup, client: {id: uid, name: user.name}}, now);
+        _firebaseRef.child('flight').child(flightId).setWithPriority({flightId: flightId, pickup: pickup, client: {id: uid, name: user.name, rating: user.rating || {}}}, now);
     };
 
     /**
