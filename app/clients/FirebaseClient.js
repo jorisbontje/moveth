@@ -83,10 +83,10 @@ var FirebaseClient = function(firebaseRef) {
 
         if (isPilot) {
             flightRef.update({pilot: rating});
-            userRef = _firebaseRef.child('user').child(flight.clientId);
+            userRef = _firebaseRef.child('user').child(flight.client.id);
         } else {
             flightRef.update({client: rating});
-            userRef = _firebaseRef.child('user').child(flight.pilotId);
+            userRef = _firebaseRef.child('user').child(flight.pilot.id);
         }
 
         userRef.child('rating/' + (rating > 0 ? 'pos' : 'neg')).transaction(function(currentRating) {
