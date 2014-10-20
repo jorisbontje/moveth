@@ -48,9 +48,9 @@ var GMap = React.createClass({
         center.setPosition(latlng);
 
         if (markerOnline) {
-            center.setIcon("http://maps.google.com/mapfiles/ms/icons/green-dot.png");
+            center.setIcon("https://maps.google.com/mapfiles/ms/icons/green-dot.png");
         } else {
-            center.setIcon("http://maps.google.com/mapfiles/ms/icons/red-dot.png");
+            center.setIcon("https://maps.google.com/mapfiles/ms/icons/red-dot.png");
         }
 
         if (this.props.onAddressChange && (this.props.latitude != latitude || this.props.longitude != longitude)) {
@@ -90,7 +90,7 @@ var GMap = React.createClass({
                 position: latLng,
                 map: map,
                 title: point.name,
-                icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+                icon: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
                 scale: 20,
                 zIndex: 0
             });
@@ -143,7 +143,7 @@ var GMap = React.createClass({
                 position: center,
                 map: map,
                 title: "YOU",
-                icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+                icon: "https://maps.google.com/mapfiles/ms/icons/red-dot.png"
             });
 
             var geocoder = new google.maps.Geocoder();
